@@ -62,11 +62,11 @@
   #include "../../feature/repeat.h"
 #endif
 
-void menu_tune();
+//void menu_tune();
 void menu_cancelobject();
-void menu_motion();
-void menu_temperature();
-void menu_configuration();
+//void menu_motion();
+//void menu_temperature();
+//void menu_configuration();
 
 #if HAS_POWER_MONITOR
   void menu_power_monitor();
@@ -245,47 +245,15 @@ void menu_configuration();
 
 void menu_main() {
   const bool busy = printingIsActive()
-    #if ENABLED(SDSUPPORT)
-      , card_detected = card.isMounted()
-      , card_open = card_detected && card.isFileOpen()
-    #endif
+    //#if ENABLED(SDSUPPORT)
+     // , card_detected = card.isMounted()
+      //, card_open = card_detected && card.isFileOpen()
+    //#endif
   ;
 
   START_MENU();
-  BACK_ITEM(MSG_INFO_SCREEN);
-
-  #if ENABLED(SDSUPPORT)
-
-    #if !defined(MEDIA_MENU_AT_TOP) && !HAS_ENCODER_WHEEL
-      #define MEDIA_MENU_AT_TOP
-    #endif
-
-    auto sdcard_menu_items = [&]{
-      #if ENABLED(MENU_ADDAUTOSTART)
-        ACTION_ITEM(MSG_RUN_AUTO_FILES, card.autofile_begin); // Run Auto Files
-      #endif
-
-      if (card_detected) {
-        if (!card_open) {
-          #if PIN_EXISTS(SD_DETECT)
-            GCODES_ITEM(MSG_CHANGE_MEDIA, PSTR("M21"));       // M21 Change Media
-          #else                                               // - or -
-            GCODES_ITEM(MSG_RELEASE_MEDIA, PSTR("M22"));      // M22 Release Media
-          #endif
-          SUBMENU(MSG_MEDIA_MENU, MEDIA_MENU_GATEWAY);        // Media Menu (or Password First)
-        }
-      }
-      else {
-        #if PIN_EXISTS(SD_DETECT)
-          ACTION_ITEM(MSG_NO_MEDIA, nullptr);                 // "No Media"
-        #else
-          GCODES_ITEM(MSG_ATTACH_MEDIA, PSTR("M21"));         // M21 Attach Media
-        #endif
-      }
-    };
-
-  #endif
-
+  ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
+  ACTION_ITEM(MSG_STORE_EEPROM, ui.store_settings);
   if (busy) {
     #if MACHINE_CAN_PAUSE
       ACTION_ITEM(MSG_PAUSE_PRINT, ui.pause_print);
@@ -305,7 +273,7 @@ void menu_main() {
         ACTION_ITEM(MSG_END_LOOPS, repeat.cancel);
     #endif
 
-    SUBMENU(MSG_TUNE, menu_tune);
+    //SUBMENU(MSG_TUNE, menu_tune);
 
     #if ENABLED(CANCEL_OBJECTS) && DISABLED(SLIM_LCD_MENUS)
       SUBMENU(MSG_CANCEL_OBJECT, []{ editable.int8 = -1; ui.goto_screen(menu_cancelobject); });
@@ -313,9 +281,7 @@ void menu_main() {
   }
   else {
 
-    #if BOTH(SDSUPPORT, MEDIA_MENU_AT_TOP)
-      sdcard_menu_items();
-    #endif
+
 
     if (TERN0(MACHINE_CAN_PAUSE, printingIsPaused()))
       ACTION_ITEM(MSG_RESUME_PRINT, ui.resume_print);
@@ -328,7 +294,7 @@ void menu_main() {
       SUBMENU(MSG_PREHEAT_CUSTOM, menu_preheat_only);
     #endif
 
-    SUBMENU(MSG_MOTION, menu_motion);
+    //SUBMENU(MSG_MOTION, menu_motion);
   }
 
   #if HAS_CUTTER
@@ -336,7 +302,7 @@ void menu_main() {
   #endif
 
   #if HAS_TEMPERATURE
-    SUBMENU(MSG_TEMPERATURE, menu_temperature);
+    //SUBMENU(MSG_TEMPERATURE, menu_temperature);
   #endif
 
   #if HAS_POWER_MONITOR
@@ -351,7 +317,7 @@ void menu_main() {
     if (!busy) SUBMENU(MSG_MMU2_MENU, menu_mmu2);
   #endif
 
-  SUBMENU(MSG_CONFIGURATION, menu_configuration);
+  //SUBMENU(MSG_CONFIGURATION, menu_configuration);
 
   #if ENABLED(CUSTOM_MENU_MAIN)
     if (TERN1(CUSTOM_MENU_MAIN_ONLY_IDLE, !busy)) {
@@ -392,9 +358,7 @@ void menu_main() {
       GCODES_ITEM(MSG_SWITCH_PS_ON, PSTR("M80"));
   #endif
 
-  #if ENABLED(SDSUPPORT) && DISABLED(MEDIA_MENU_AT_TOP)
-    sdcard_menu_items();
-  #endif
+
 
   #if HAS_SERVICE_INTERVALS
     static auto _service_reset = [](const int index) {
@@ -449,7 +413,7 @@ void menu_main() {
       );
     }
   #endif
-
+ 
   #if HAS_MULTI_LANGUAGE
     SUBMENU(LANGUAGE, menu_language);
   #endif

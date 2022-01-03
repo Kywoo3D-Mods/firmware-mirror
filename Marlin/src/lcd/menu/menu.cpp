@@ -347,7 +347,6 @@ void _lcd_draw_homing() {
     MenuItem_static::draw(line, GET_TEXT(MSG_LEVEL_BED_HOMING));
   }
 }
-
 #if ENABLED(LCD_BED_LEVELING) || (HAS_LEVELING && DISABLED(SLIM_LCD_MENUS))
   #include "../../feature/bedlevel/bedlevel.h"
   void _lcd_toggle_bed_leveling() { set_bed_leveling_enabled(!planner.leveling_active); }

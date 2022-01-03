@@ -229,7 +229,6 @@ void menu_advanced_settings();
 
   void menu_bltouch() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
     ACTION_ITEM(MSG_BLTOUCH_RESET, bltouch._reset);
     ACTION_ITEM(MSG_BLTOUCH_SELFTEST, bltouch._selftest);
     ACTION_ITEM(MSG_BLTOUCH_DEPLOY, bltouch._deploy);
@@ -320,7 +319,6 @@ void menu_advanced_settings();
     const uint8_t m = MenuItemBase::itemIndex;
     START_MENU();
     STATIC_ITEM_P(ui.get_preheat_label(m), SS_DEFAULT|SS_INVERT);
-    BACK_ITEM(MSG_CONFIGURATION);
     #if HAS_FAN
       editable.uint8 = uint8_t(ui.material_preset[m].fan_speed);
       EDIT_ITEM_N(percent, m, MSG_FAN_SPEED, &editable.uint8, 0, 255, []{ ui.material_preset[MenuItemBase::itemIndex].fan_speed = editable.uint8; });
@@ -485,8 +483,8 @@ void menu_configuration() {
   const bool busy = printer_busy();
 
   START_MENU();
-  BACK_ITEM(MSG_MAIN);
 
+  ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
   //
   // Debug Menu when certain options are enabled
   //
@@ -507,7 +505,7 @@ void menu_configuration() {
   SUBMENU(MSG_ADVANCED_SETTINGS, menu_advanced_settings);
 
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
-    SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
+    //SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
   #elif HAS_BED_PROBE
     EDIT_ITEM(LCD_Z_OFFSET_TYPE, MSG_ZPROBE_ZOFFSET, &probe.offset.z, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX);
   #endif
@@ -533,7 +531,7 @@ void menu_configuration() {
     #endif
 
     #if ENABLED(BLTOUCH)
-      SUBMENU(MSG_BLTOUCH, menu_bltouch);
+      //SUBMENU(MSG_BLTOUCH, menu_bltouch);
     #endif
 
     #if ENABLED(TOUCH_MI_PROBE)
@@ -576,12 +574,6 @@ void menu_configuration() {
     EDIT_ITEM(bool, MSG_SOUND, &ui.buzzer_enabled, []{ ui.chirp(); });
   #endif
 
-  #if ENABLED(EEPROM_SETTINGS)
-    ACTION_ITEM(MSG_STORE_EEPROM, ui.store_settings);
-    if (!busy) ACTION_ITEM(MSG_LOAD_EEPROM, ui.load_settings);
-  #endif
-
-  if (!busy) ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
 
   END_MENU();
 }

@@ -48,9 +48,9 @@
 void MarlinUI::tft_idle() {
   #if ENABLED(TOUCH_SCREEN)
     if (draw_menu_navigation) {
-      add_control(104, TFT_HEIGHT - 34, PAGE_UP, imgPageUp, encoderTopLine > 0);
-      add_control(344, TFT_HEIGHT - 34, PAGE_DOWN, imgPageDown, encoderTopLine + LCD_HEIGHT < screen_items);
-      add_control(224, TFT_HEIGHT - 34, BACK, imgBack);
+      add_control(430, 40, PAGE_UP, imgUp, encoderTopLine > 0);
+      add_control(430, 247, PAGE_DOWN, imgDown, encoderTopLine + LCD_HEIGHT < screen_items);
+      add_control(430, 143, BACK, imgBack);
       draw_menu_navigation = false;
     }
   #endif
@@ -178,12 +178,12 @@ void draw_heater_status(uint16_t x, uint16_t y, const int8_t Heater) {
     }
   #endif
 
-  tft.add_image(8, 28, image, Color);
+  tft.add_image(8, 33, image, Color);
 
   tft_string.set((uint8_t *)i16tostr3rj(currentTemperature));
   tft_string.add(LCD_STR_DEGREE);
   tft_string.trim();
-  tft.add_text(tft_string.center(80) + 2, 82, Color, tft_string);
+  tft.add_text(tft_string.center(80) + 2, 92, Color, tft_string);
 
   if (targetTemperature >= 0) {
     tft_string.set((uint8_t *)i16tostr3rj(targetTemperature));
@@ -208,11 +208,11 @@ void draw_fan_status(uint16_t x, uint16_t y, const bool blink) {
   else
     image = imgFanIdle;
 
-  tft.add_image(8, 20, image, COLOR_FAN);
+  tft.add_image(8, 33, image, COLOR_FAN);
 
   tft_string.set((uint8_t *)ui8tostr4pctrj(thermalManager.fan_speed[0]));
   tft_string.trim();
-  tft.add_text(tft_string.center(80) + 6, 82, COLOR_FAN, tft_string);
+  tft.add_text(tft_string.center(80) + 6, 92, COLOR_FAN, tft_string);
 }
 
 void MarlinUI::draw_status_screen() {
@@ -306,6 +306,9 @@ void MarlinUI::draw_status_screen() {
   tft.add_text(36, 1, color , tft_string);
   TERN_(TOUCH_SCREEN, touch.add_control(FLOWRATE, 284, 176, 100, 32, active_extruder));
 
+  // z offset
+  TERN_(HAS_TFT_XPT2046, add_control(430 , 280 , lcd_babystep_zoffset, imgLeveling));
+
   #if ENABLED(TOUCH_SCREEN)
     add_control(404, y, menu_main, imgSettings);
     TERN_(SDSUPPORT, add_control(12, y, menu_media, imgSD, !printingIsActive(), COLOR_CONTROL_ENABLED, card.isMounted() && printingIsActive() ? COLOR_BUSY : COLOR_CONTROL_DISABLED));
@@ -333,11 +336,11 @@ void MarlinUI::draw_status_screen() {
 
   y += 20;
   // status message
-  tft.canvas(0, y, TFT_WIDTH, FONT_LINE_HEIGHT - 5);
+  tft.canvas(0, y, TFT_WIDTH - 60, FONT_LINE_HEIGHT - 5);
   tft.set_background(COLOR_BACKGROUND);
   tft_string.set(status_message);
   tft_string.trim();
-  tft.add_text(tft_string.center(TFT_WIDTH), 0, COLOR_STATUS_MESSAGE, tft_string);
+  tft.add_text(tft_string.center(TFT_WIDTH - 60), 0, COLOR_STATUS_MESSAGE, tft_string);
 }
 
 // Low-level draw_edit_screen can be used to draw an edit screen from anyplace
@@ -387,13 +390,13 @@ void MenuEditItemBase::draw_edit_screen(PGM_P const pstr, const char * const val
     tft.set_background(COLOR_BACKGROUND);
 
     int16_t position = (SLIDER_LENGTH - 2) * ui.encoderPosition / maxEditValue;
-    tft.add_bar(0, 7, 1, 2, ui.encoderPosition == 0 ? COLOR_SLIDER_INACTIVE : COLOR_SLIDER);
-    tft.add_bar(1, 6, position, 4, COLOR_SLIDER);
-    tft.add_bar(position + 1, 6, SLIDER_LENGTH - 2 - position, 4, COLOR_SLIDER_INACTIVE);
-    tft.add_bar(SLIDER_LENGTH - 1, 7, 1, 2, int32_t(ui.encoderPosition) == maxEditValue ? COLOR_SLIDER : COLOR_SLIDER_INACTIVE);
+    tft.add_bar(0, 4, 1, 14, ui.encoderPosition == 0 ? COLOR_SLIDER_INACTIVE : COLOR_SLIDER);
+    tft.add_bar(1, 3, position, 16, COLOR_DODGER_BLUE);
+    tft.add_bar(position + 1, 3, SLIDER_LENGTH - 2 - position, 16, COLOR_SLIDER_INACTIVE);
+    tft.add_bar(SLIDER_LENGTH - 1, 4, 1, 14, int32_t(ui.encoderPosition) == maxEditValue ? COLOR_SLIDER : COLOR_SLIDER_INACTIVE);
 
     #if ENABLED(TOUCH_SCREEN)
-      tft.add_image((SLIDER_LENGTH - 8) * ui.encoderPosition / maxEditValue, 0, imgSlider, COLOR_SLIDER);
+      tft.add_image((SLIDER_LENGTH - 8) * ui.encoderPosition / maxEditValue, 0, imgSlider, COLOR_DODGER_BLUE);
       touch.add_control(SLIDER, (TFT_WIDTH - SLIDER_LENGTH) / 2, SLIDER_Y_POSITION - 8, SLIDER_LENGTH, 32, maxEditValue);
     #endif
   }
@@ -614,7 +617,7 @@ static void drawCurESelection() {
 static void drawMessage(const char *msg) {
   tft.canvas(X_MARGIN, TFT_HEIGHT - Y_MARGIN - 34, TFT_HEIGHT / 2, 34);
   tft.set_background(COLOR_BACKGROUND);
-  tft.add_text(0, 0, COLOR_YELLOW, msg);
+  tft.add_text(0, 0, COLOR_DODGER_BLUE, msg);
 }
 
 static void drawAxisValue(const AxisEnum axis) {
@@ -773,6 +776,10 @@ static void disable_steppers() {
   quick_feedback();
   queue.inject_P(PSTR("M84"));
 }
+static void level_bed() {
+  quick_feedback();
+  queue.inject_P(PSTR("G29"));
+}
 
 static void drawBtn(int x, int y, const char *label, intptr_t data, MarlinImage img, uint16_t bgColor, bool enabled = true) {
   uint16_t width = Images[imgBtn52Rounded].width;
@@ -842,14 +849,14 @@ void MarlinUI::move_axis_screen() {
   TERN_(HAS_TFT_XPT2046, if (!busy) touch.add_control(BUTTON, x, y, BTN_WIDTH, BTN_HEIGHT, (intptr_t)e_select));
 
   x += BTN_WIDTH + spacing;
-  drawBtn(x, y, "X-", (intptr_t)x_minus, imgLeft, X_BTN_COLOR, !busy);
+  drawBtn(x, y, "X+", (intptr_t)x_plus, imgLeft, X_BTN_COLOR, !busy);
 
   x += BTN_WIDTH + spacing; //imgHome is 64x64
   TERN_(HAS_TFT_XPT2046, add_control(TFT_WIDTH / 2 - Images[imgHome].width / 2, y - (Images[imgHome].width - BTN_HEIGHT) / 2, BUTTON, (intptr_t)do_home, imgHome, !busy));
 
   x += BTN_WIDTH + spacing;
   uint16_t xplus_x = x;
-  drawBtn(x, y, "X+", (intptr_t)x_plus, imgRight, X_BTN_COLOR, !busy);
+  drawBtn(x, y, "X-", (intptr_t)x_minus, imgRight, X_BTN_COLOR, !busy);
 
   x += BTN_WIDTH + spacing;
   motionAxisState.zTypePos.x = x;
@@ -898,9 +905,9 @@ void MarlinUI::move_axis_screen() {
   }
 
   // aligned with x+
-  drawBtn(xplus_x, TFT_HEIGHT - Y_MARGIN - BTN_HEIGHT, "off", (intptr_t)disable_steppers, imgCancel, COLOR_WHITE, !busy);
-
-  TERN_(HAS_TFT_XPT2046, add_control(TFT_WIDTH - X_MARGIN - BTN_WIDTH, y, BACK, imgBack));
+  drawBtn(xplus_x, TFT_HEIGHT - Y_MARGIN - BTN_HEIGHT - 60 , "off", (intptr_t)disable_steppers, imgCancel, COLOR_RED, !busy);
+  drawBtn(xplus_x, TFT_HEIGHT - Y_MARGIN - BTN_HEIGHT, "level", (intptr_t)level_bed, imgCancel, COLOR_WHITE, !busy);
+  TERN_(HAS_TFT_XPT2046, add_control(TFT_WIDTH - X_MARGIN - BTN_WIDTH +30, y, BACK, imgBack));
 }
 
 #endif // HAS_UI_480x320

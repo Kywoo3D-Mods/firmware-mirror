@@ -54,7 +54,7 @@ void menu_item(const uint8_t row, bool sel ) {
   menu_line(row, sel ? COLOR_SELECTION_BG : COLOR_BACKGROUND);
   #if ENABLED(TOUCH_SCREEN)
     const TouchControlType tct = TERN(SINGLE_TOUCH_NAVIGATION, true, sel) ? MENU_CLICK : MENU_ITEM;
-    touch.add_control(tct, 0, TFT_TOP_LINE_Y + row * MENU_LINE_HEIGHT, TFT_WIDTH, MENU_ITEM_HEIGHT, encoderTopLine + row);
+    touch.add_control(tct, 0, TFT_TOP_LINE_Y + row * MENU_LINE_HEIGHT, TFT_WIDTH - 80 , MENU_ITEM_HEIGHT, encoderTopLine + row);
   #endif
 }
 
@@ -138,7 +138,7 @@ void MenuEditItemBase::draw(const bool sel, const uint8_t row, PGM_P const pstr,
   tft.add_text(MENU_TEXT_X_OFFSET, MENU_TEXT_Y_OFFSET, COLOR_MENU_TEXT, tft_string);
   if (data) {
     tft_string.set(data);
-    tft.add_text(TFT_WIDTH - MENU_TEXT_X_OFFSET - tft_string.width(), MENU_TEXT_Y_OFFSET, COLOR_MENU_VALUE, tft_string);
+    tft.add_text(TFT_WIDTH - MENU_TEXT_X_OFFSET - tft_string.width() - 80 , MENU_TEXT_Y_OFFSET, COLOR_MENU_VALUE, tft_string);
   }
 }
 

@@ -107,7 +107,7 @@
 
 void menu_tune() {
   START_MENU();
-  BACK_ITEM(MSG_MAIN);
+  
 
   //
   // Speed:

@@ -27,7 +27,7 @@
   #error "MKS Robin Nano V3 supports up to 1 hotends / E-steppers."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin PRO V2"
+#define BOARD_INFO_NAME "Kywoo3D"
 
 // Avoid conflict with TIMER_TONE
 #define STEP_TIMER                            10

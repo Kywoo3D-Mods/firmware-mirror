@@ -29,7 +29,7 @@
   #error "MKS Robin Nano V3 doesn't support FSMC-based TFT displays."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin Nano V3"
+#define BOARD_INFO_NAME "Kywoo3D"
 
 // USB Flash Drive support
 #define HAS_OTG_USB_HOST_SUPPORT
@@ -191,7 +191,7 @@
   #define FIL_RUNOUT2_PIN               MT_DET_2_PIN
 #endif
 
-//#define MKSPWC
+#define MKSPWC
 #ifdef MKSPWC
   #define SUICIDE_PIN                       PW_OFF   // Enable MKSPWC SUICIDE PIN
   #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE

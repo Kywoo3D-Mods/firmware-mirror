@@ -32,7 +32,7 @@
   #error "MKS Robin nano supports up to 2 hotends / E-steppers. Comment out this line to continue."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin Nano"
+#define BOARD_INFO_NAME "Kywoo3D"
 
 #define BOARD_NO_NATIVE_USB
 

@@ -22,3 +22,12 @@ Notably they switched the UI from MKS's lvgl based UI, to Marlin's "Color UI".
 ## Structure
 
 The `main` branch is to keep tools/docs that help maintain this mirror.
+[`mks-fork`](https://github.com/Kywoo3D-Mods/firmware-mirror/tree/mks-fork) is the last commit before forking from MKS.
+From there we have the following branches.
+
+|Model|v1|v2|
+|---|---|---|
+|Tycoon|[`tycoon-v1`](https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-v1)|[`tycoon-v2`](https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-v2)|
+|Tycoon Max|[`tycoon-max-v1`](https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-max-v1)|_missing_|
+|Tycoon Slim|_missing_|_missing_|
+|Tycoon IDEX|_missing_|_missing_|

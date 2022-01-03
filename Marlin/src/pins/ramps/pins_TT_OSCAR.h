@@ -19,10 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 
-#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
-  #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
-#endif
+#include "env_validate.h"
 
 #if HOTENDS > 5 || E_STEPPERS > 5
   #error "TTOSCAR supports up to 5 hotends / E-steppers. Comment out this line to continue."

@@ -21,15 +21,16 @@
  */
 #pragma once
 
-#if NOT_TARGET(STM32F4, STM32F4xx)
-  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
-#elif HOTENDS > 2 || E_STEPPERS > 2
+#define ALLOW_STM32DUINO
+#include "env_validate.h"
+
+#if HOTENDS > 2 || E_STEPPERS > 2
   #error "MKS Robin Nano V3 supports up to 2 hotends / E-steppers."
 #elif HAS_FSMC_TFT
   #error "MKS Robin Nano V3 doesn't support FSMC-based TFT displays."
 #endif
 
-#define BOARD_INFO_NAME "Kywoo3D"
+#define BOARD_INFO_NAME "MKS Robin Nano V3"
 
 // USB Flash Drive support
 #define HAS_OTG_USB_HOST_SUPPORT
@@ -42,9 +43,8 @@
 //#define FLASH_EEPROM_EMULATION                  // Use Flash-based EEPROM emulation
 #define I2C_EEPROM
 #define MARLIN_EEPROM_SIZE                0x1000  // 4KB
-
-#define I2C_SCL_PIN                       PB6 
-#define I2C_SDA_PIN                       PB7
+#define I2C_SCL_PIN                         PB6
+#define I2C_SDA_PIN                         PB7
 
 //
 // Release PB4 (Z_DIR_PIN) from JTAG NRST role
@@ -166,8 +166,8 @@
 #define HEATER_1_PIN                        PB0   // HEATER2
 #define HEATER_BED_PIN                      PA0   // HOT BED
 
-#define FAN_PIN                             PB1   // FAN
-#define FAN1_PIN                            PC14  // FAN1
+#define FAN_PIN                             PC14  // FAN
+#define FAN1_PIN                            PB1   // FAN1
 
 //
 // Thermocouples
@@ -178,36 +178,29 @@
 //
 // Misc. Functions
 //
-#define MT_DET_1_PIN                        PA4
-#define MT_DET_2_PIN                        PE6
-#define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
+#define MT_DET_1                            PA4
+#define MT_DET_2                            PE6
 #define PW_DET                              PA13
 #define PW_OFF                              PB2
 
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                MT_DET_1_PIN
+  #define FIL_RUNOUT_PIN                MT_DET_1
 #endif
 #ifndef FIL_RUNOUT2_PIN
-  #define FIL_RUNOUT2_PIN               MT_DET_2_PIN
+  #define FIL_RUNOUT2_PIN               MT_DET_2
 #endif
 
-#define MKSPWC
-#ifdef MKSPWC
-  #define SUICIDE_PIN                       PW_OFF   // Enable MKSPWC SUICIDE PIN
-  #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
-  #define KILL_PIN                          PW_DET   // Enable MKSPWC DET PIN
-  #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
+#ifndef POWER_LOSS_PIN
+  #define POWER_LOSS_PIN                  PW_DET
 #endif
+#define PS_ON_PIN                         PW_OFF
 
-//#define MKS_TEST
-
-#if ENABLED(MKS_TEST)
-  #define MKS_TEST_POWER_LOSS_PIN         PW_DET   // PW_DET
-  #define MKS_TEST_PS_ON_PIN              PW_OFF   // PW_OFF
-#endif
-
-//#define POWER_LOSS_PIN                    PW_DET
-//#define PS_ON_PIN                         PW_OFF
+//
+// Enable MKSPWC support
+//
+//#define SUICIDE_PIN                       PB2
+//#define KILL_PIN                          PA2
+//#define KILL_PIN_INVERTING                true
 
 //#define LED_PIN                           PB2
 
@@ -216,10 +209,6 @@
 #define WIFI_SERIAL              3  // USART3
 #define MKS_WIFI_MODULE_SERIAL   1  // USART1
 #define MKS_WIFI_MODULE_SPI      2  // SPI2
-
-#define WIFI_IO0_PIN                      PC13  // MKS ESP WIFI IO0 PIN
-#define WIFI_IO1_PIN                      PC7   // MKS ESP WIFI IO1 PIN
-#define WIFI_RESET_PIN                    PE9   // MKS ESP WIFI RESET PIN
 
 #ifndef SDCARD_CONNECTION
   #define SDCARD_CONNECTION              ONBOARD
@@ -230,37 +219,31 @@
 //
 // detect pin dont work when ONBOARD and NO_SD_HOST_DRIVE disabled
 #if SD_CONNECTION_IS(ONBOARD)
-  #define CUSTOM_SPI_PINS                         // TODO: needed because is the only way to set SPI3 for SD on STM32 (by now)
-  #if ENABLED(CUSTOM_SPI_PINS)
-    #define ENABLE_SPI3
-    #define SD_SS_PIN                       -1
-    #define SDSS                            PC9
-    #define SD_SCK_PIN                      PC10
-    #define SD_MISO_PIN                     PC11
-    #define SD_MOSI_PIN                     PC12
-    #define SD_DETECT_PIN                   PD12
-  #endif
+  #define ENABLE_SPI3
+  #define SD_SS_PIN                         -1
+  #define SDSS                              PC9
+  #define SD_SCK_PIN                        PC10
+  #define SD_MISO_PIN                       PC11
+  #define SD_MOSI_PIN                       PC12
+  #define SD_DETECT_PIN                     PD12
 #endif
 
 //
 // LCD SD
 //
 #if SD_CONNECTION_IS(LCD)
-  #define CUSTOM_SPI_PINS
-  #if ENABLED(CUSTOM_SPI_PINS)
-    #define ENABLE_SPI1
-    #define SDSS                            PE10
-    #define SD_SCK_PIN                      PA5
-    #define SD_MISO_PIN                     PA6
-    #define SD_MOSI_PIN                     PA7
-    #define SD_DETECT_PIN                   PE12
-  #endif
+  #define ENABLE_SPI1
+  #define SDSS                              PE10
+  #define SD_SCK_PIN                        PA5
+  #define SD_MISO_PIN                       PA6
+  #define SD_MOSI_PIN                       PA7
+  #define SD_DETECT_PIN                     PE12
 #endif
 
 //
 // LCD / Controller
 #define SPI_FLASH
-#define HAS_SPI_FLASH                          1
+#define HAS_SPI_FLASH 1
 #define SPI_DEVICE                             2
 #define SPI_FLASH_SIZE                 0x1000000
 #if ENABLED(SPI_FLASH)
@@ -335,7 +318,8 @@
 
   #define TFT_BUFFER_SIZE                  14400
 
-#elif HAS_SPI_LCD
+#elif HAS_WIRED_LCD
+
   #define BEEPER_PIN                        PC5
   #define BTN_ENC                           PE13
   #define LCD_PINS_ENABLE                   PD13
@@ -371,4 +355,5 @@
     #define BOARD_ST7920_DELAY_3    DELAY_NS(600)
 
   #endif // !MKS_MINI_12864
-#endif // HAS_SPI_LCD
+
+#endif // HAS_WIRED_LCD

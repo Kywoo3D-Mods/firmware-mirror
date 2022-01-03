@@ -1,113 +1,90 @@
-# Mks-Robin-Nano-Marlin2.0-Firmware
-## Features
-The firmware of MKS Robin Nano, based on [Marlin2.0.x](https://github.com/MarlinFirmware/Marlin), added the [LittlevGL](https://github.com/littlevgl/lvgl), supporting colourful GUI and touch screen. It is developed on PlatformIO, we hope more and more developers will participate the development of this repository.
+# Marlin 3D Printer Firmware
 
-![](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/blob/master/Images/MKS_Robin_Nano_printing.png)
+![GitHub](https://img.shields.io/github/license/marlinfirmware/marlin.svg)
+![GitHub contributors](https://img.shields.io/github/contributors/marlinfirmware/marlin.svg)
+![GitHub Release Date](https://img.shields.io/github/release-date/marlinfirmware/marlin.svg)
+[![Build Status](https://github.com/MarlinFirmware/Marlin/workflows/CI/badge.svg?branch=bugfix-2.0.x)](https://github.com/MarlinFirmware/Marlin/actions)
 
-## Build
-As the firmware is based on Marlin2.0.x which is built on the core of PlatformIO, the buid compiling steps are the same as Marlin2.0.x. You can directly using [PlatformIO Shell Commands](https://docs.platformio.org/en/latest/core/installation.html#piocore-install-shell-commands), or using IDEs contain built-in PlatformIO Core(CLI), for example, [VSCode](https://docs.platformio.org/en/latest/integration/ide/vscode.html#ide-vscode) and [Atom](https://docs.platformio.org/en/latest/integration/ide/atom.html). VSCode is recommended.
+<img align="right" width=175 src="buildroot/share/pixmaps/logo/marlin-250.png" />
 
-## About the gcode file preview
-The images should be added to gcode file when slicing, and MKS has developed the [plugin for Cura](https://github.com/makerbase-mks/mks-wifi-plugin) to make it.
+Additional documentation can be found at the [Marlin Home Page](https://marlinfw.org/).
+Please test this firmware and let us know if it misbehaves in any way. Volunteers are standing by!
 
-## About the image conversion
-- Open [LVGL online image converter tool](https://lvgl.io/tools/imageconverter). 
-- Open bmp images.
-- Enter the saved file name.
-- Choose color format:True color.
-- Choose file output format:Binary RGB565.
-- Start convertion.
-- Save bin file.
-- Copy the converted bin file to the assets folder.
-- Copy the assets folder to the SD card.
-- SD card is connected to the motherboard, and you can see the update interface after powering on.
+## Marlin 2.0
 
-## Firmware Can be run on Robin Nano V1.x / V2.x boards and V3.x boards
-## MKS Robin Nano V1.x build and update firmware
+Marlin 2.0 takes this popular RepRap firmware to the next level by adding support for much faster 32-bit and ARM-based boards while improving support for 8-bit AVR boards. Read about Marlin's decision to use a "Hardware Abstraction Layer" below.
 
-1. Build config:
-     
-- platformio.ini: 
-     
-     default_envs = mks_robin_nano35    
-- Configuation.h:  
-     #define SERIAL_PORT 3  
-     #define MKS_ROBIN_TFT35  
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO  
-     #define TFT_LVGL_UI  
-     #define TOUCH_SCREEN  
+Download earlier versions of Marlin on the [Releases page](https://github.com/MarlinFirmware/Marlin/releases).
 
-2. Update firmware:
-   
-- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
-- Insert SD card to the motherboard, and you can see the update interface after power on.   
+## Example Configurations
 
-## MKS Robin Nano V2.x build and update firmware
+Before building Marlin you'll need to configure it for your specific hardware. Your vendor should have already provided source code with configurations for the installed firmware, but if you ever decide to upgrade you'll need updated configuration files. Marlin users have contributed dozens of tested example configurations to get you started. Visit the [MarlinFirmware/Configurations](https://github.com/MarlinFirmware/Configurations) repository to find the right configuration for your hardware.
 
-1. Build config:
-     
-- platformio.ini: 
-     
-     default_envs = mks_robin_nano35    
-- Configuation.h:   
-     #define SERIAL_PORT 3  
-     #define MKS_TS35_V2_0  
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2     
-     #define TFT_LVGL_UI  
-     #define TOUCH_SCREEN  
+## Building Marlin 2.0
 
-2. Update firmware:
-   
-- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
-- Insert SD card is to the motherboard, and you can see the update interface after power on.   
+To build Marlin 2.0 you'll need [Arduino IDE 1.8.8 or newer](https://www.arduino.cc/en/main/software) or [PlatformIO](http://docs.platformio.org/en/latest/ide.html#platformio-ide). Detailed build and install instructions are posted at:
 
-## MKS Robin Nano V3.x build and update firmware
+  - [Installing Marlin (Arduino)](http://marlinfw.org/docs/basics/install_arduino.html)
+  - [Installing Marlin (VSCode)](http://marlinfw.org/docs/basics/install_platformio_vscode.html).
 
-1. Build config:
-     
-- platformio.ini: 
-     
-     default_envs = mks_robin_nano_v3_usb_flash_drive_msc
-- Configuation.h:   
-     #define SERIAL_PORT -1  
-     #define MKS_TS35_V2_0  
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3     
-     #define TFT_LVGL_UI  
-     #define TOUCH_SCREEN
+### Supported Platforms
 
-- Configuation_adv.h:    
-     Now you can either use the TF card or USB disk, use TF card:   
-    // #define USB_FLASH_DRIVE_SUPPORT  
-    Use USB disk:  
-     #define USB_FLASH_DRIVE_SUPPORT  
+  Platform|MCU|Example Boards
+  --------|---|-------
+  [Arduino AVR](https://www.arduino.cc/)|ATmega|RAMPS, Melzi, RAMBo
+  [Teensy++ 2.0](http://www.microchip.com/wwwproducts/en/AT90USB1286)|AT90USB1286|Printrboard
+  [Arduino Due](https://www.arduino.cc/en/Guide/ArduinoDue)|SAM3X8E|RAMPS-FD, RADDS, RAMPS4DUE
+  [ESP32](https://github.com/espressif/arduino-esp32)|ESP32|FYSETC E4, E4d@BOX, MRR
+  [LPC1768](http://www.nxp.com/products/microcontrollers-and-processors/arm-based-processors-and-mcus/lpc-cortex-m-mcus/lpc1700-cortex-m3/512kb-flash-64kb-sram-ethernet-usb-lqfp100-package:LPC1768FBD100)|ARM® Cortex-M3|MKS SBASE, Re-ARM, Selena Compact
+  [LPC1769](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc1700-cortex-m3/512kb-flash-64kb-sram-ethernet-usb-lqfp100-package:LPC1769FBD100)|ARM® Cortex-M3|Smoothieboard, Azteeg X5 mini, TH3D EZBoard
+  [STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html)|ARM® Cortex-M3|Malyan M200, GTM32 Pro, MKS Robin, BTT SKR Mini
+  [STM32F401](https://www.st.com/en/microcontrollers-microprocessors/stm32f401.html)|ARM® Cortex-M4|ARMED, Rumba32, SKR Pro, Lerdge, FYSETC S6
+  [STM32F7x6](https://www.st.com/en/microcontrollers-microprocessors/stm32f7x6.html)|ARM® Cortex-M7|The Borg, RemRam V1
+  [SAMD51P20A](https://www.adafruit.com/product/4064)|ARM® Cortex-M4|Adafruit Grand Central M4
+  [Teensy 3.5](https://www.pjrc.com/store/teensy35.html)|ARM® Cortex-M4|
+  [Teensy 3.6](https://www.pjrc.com/store/teensy36.html)|ARM® Cortex-M4|
+  [Teensy 4.0](https://www.pjrc.com/store/teensy40.html)|ARM® Cortex-M7|
+  [Teensy 4.1](https://www.pjrc.com/store/teensy41.html)|ARM® Cortex-M7|
+  Linux Native|x86/ARM/etc.|Raspberry Pi
 
-2. Update firmware:
-   
-- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano_v3.bin` to the sd card or usb disk
-- Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.  
+## Submitting Changes
 
-3. Example build config:
+- Submit **Bug Fixes** as Pull Requests to the ([bugfix-2.0.x](https://github.com/MarlinFirmware/Marlin/tree/bugfix-2.0.x)) branch.
+- Follow the [Coding Standards](http://marlinfw.org/docs/development/coding_standards.html) to gain points with the maintainers.
+- Please submit your questions and concerns to the [Issue Queue](https://github.com/MarlinFirmware/Marlin/issues).
 
-- [Open the example configuration file](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/tree/master/config/MKS%20Robin%20nano%20v3.0).
-- Modify the parameters, replace configuration.h and configuration_adv.h in the Marlin path of the source code.
-- Compile the firmware.
+## Marlin Support
 
-4. Prebuilt *.bin firmware for update
+The Issue Queue is reserved for Bug Reports and Feature Requests. To get help with configuration and troubleshooting, please use the following resources:
 
-- We have prebuilt the robin nano v3 [firmware](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/tree/main/firmware/Marlin-bugfix2.0.x-MKS-2.1.2) for some type of printers and some extended usage. 
+- [Marlin Documentation](http://marlinfw.org) - Official Marlin documentation
+- [Marlin Discord](https://discord.gg/n5NJ59y) - Discuss issues with Marlin users and developers
+- Facebook Group ["Marlin Firmware"](https://www.facebook.com/groups/1049718498464482/)
+- RepRap.org [Marlin Forum](http://forums.reprap.org/list.php?415)
+- [Tom's 3D Forums](https://forum.toms3d.org/)
+- Facebook Group ["Marlin Firmware for 3D Printers"](https://www.facebook.com/groups/3Dtechtalk/)
+- [Marlin Configuration](https://www.youtube.com/results?search_query=marlin+configuration) on YouTube
 
+## Contributors
 
-## For more function configuration, please refer to Robin nano series Wiki
-- [MKS Robin Nano V1.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X/wiki). 
-- [MKS Robin Nano V2.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V2.X/wiki). 
-- [MKS Robin Nano V3.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/wiki).
+Marlin is constantly improving thanks to a huge number of contributors from all over the world bringing their specialties and talents. Huge thanks are due to [all the contributors](https://github.com/MarlinFirmware/Marlin/graphs/contributors) who regularly patch up bugs, help direct traffic, and basically keep Marlin from falling apart. Marlin's continued existence would not be possible without them.
 
-## More information about the Robin Nano V1.X
-Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X).
+## Administration
 
-##  More information about the Robin Nano V2.X
-Please refer to [MKS Robin Nano V2 github](https://github.com/makerbase-mks/MKS-Robin-Nano-V2).
+Regular users can open and close their own issues, but only the administrators can do project-related things like add labels, merge changes, set milestones, and kick trolls. The current Marlin admin team consists of:
 
-##  More information about the Robin Nano V3.X
-Please refer to [MKS Robin Nano V3 github](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X).
+ - Scott Lahteine [[@thinkyhead](https://github.com/thinkyhead)] - USA - Project Maintainer &nbsp; [![Donate](https://api.flattr.com/button/flattr-badge-large.png)](http://www.thinkyhead.com/donate-to-marlin)
+ - Roxanne Neufeld [[@Roxy-3D](https://github.com/Roxy-3D)] - USA
+ - Keith Bennett [[@thisiskeithb](https://github.com/thisiskeithb)] - USA
+ - Victor Oliveira [[@rhapsodyv](https://github.com/rhapsodyv)] - Brazil
+ - Chris Pepper [[@p3p](https://github.com/p3p)] - UK
+ - Jason Smith [[@sjasonsmith](https://github.com/sjasonsmith)] - USA
+ - Luu Lac [[@shitcreek](https://github.com/shitcreek)] - USA
+ - Bob Kuhn [[@Bob-the-Kuhn](https://github.com/Bob-the-Kuhn)] - USA
+ - Erik van der Zalm [[@ErikZalm](https://github.com/ErikZalm)] - Netherlands &nbsp; [![Flattr Erik](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=ErikZalm&url=https://github.com/MarlinFirmware/Marlin&title=Marlin&language=&tags=github&category=software)
 
+## License
+
+Marlin is published under the [GPL license](/LICENSE) because we believe in open development. The GPL comes with both rights and obligations. Whether you use Marlin firmware as the driver for your open or closed-source product, you must keep Marlin open, and you must provide your compatible Marlin source code to end users upon request. The most straightforward way to comply with the Marlin license is to make a fork of Marlin on Github, perform your modifications, and direct users to your modified fork.
+
+While we can't prevent the use of this code in products (3D printers, CNC, etc.) that are closed source or crippled by a patent, we would prefer that you choose another firmware or, better yet, make your own.

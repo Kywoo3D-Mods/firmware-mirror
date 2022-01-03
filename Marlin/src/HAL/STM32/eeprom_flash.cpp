@@ -28,6 +28,10 @@
 
 #include "../shared/eeprom_api.h"
 
+// Better: "utility/stm32_eeprom.h", but only after updating stm32duino to 2.0.0
+// Use EEPROM.h for compatibility, for now.
+#include <EEPROM.h>
+
 /**
  * The STM32 HAL supports chips that deal with "pages" and some with "sectors" and some that
  * even have multiple "banks" of flash.
@@ -48,7 +52,7 @@
   #include "stm32_def.h"
 
   #define DEBUG_OUT ENABLED(EEPROM_CHITCHAT)
-  #include "src/core/debug_out.h"
+  #include "../../core/debug_out.h"
 
   #ifndef MARLIN_EEPROM_SIZE
     #define MARLIN_EEPROM_SIZE    0x1000 // 4KB

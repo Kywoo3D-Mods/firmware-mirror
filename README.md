@@ -1,6 +1,11 @@
 # Kywoo3d Mods - Firmware mirror
 
-Mirrors the official firmware source code, in an easy way.
+Mirrors the official firmware source code, in an easier way.
+
+**Important:** this repository tries to organize the official firmware source code.<br>
+**But it's reorganized by the community!**
+
+For releases by Kywoo3D themselves, check the [download page](https://www.kywoo3d.com/pages/kywoo-3d-printer-download-page) or their [Github](https://github.com/Kywoo3D).
 
 ## History
 

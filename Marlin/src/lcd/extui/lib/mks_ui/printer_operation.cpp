@@ -48,7 +48,7 @@ void printer_state_polling() {
     lv_clear_cur_ui();
     lv_draw_dialog(DIALOG_TYPE_MACHINE_PAUSING_TIPS);
     #if ENABLED(SDSUPPORT)
-      while(queue.length) {
+      while(queue.ring_buffer.length) {
         queue.advance();
       }
       planner.synchronize();
@@ -160,9 +160,14 @@ void printer_state_polling() {
       public_buf_m[sizeof(public_buf_m) - 1] = 0;
       gcode.process_subcommands_now_P(PSTR(public_buf_m));
       lv_clear_cur_ui();
-      bltouch_do_init();
+      #ifdef BLTOUCH
+      bltouch_do_init(false);
       lv_draw_bltouch_settings();
-      uiCfg.autoLeveling = 0;
+      #endif
+      #ifdef TOUCH_MI_PROBE
+      lv_draw_touchmi_settings();
+      #endif
+      uiCfg.autoLeveling = false;
     }
   #endif
 }

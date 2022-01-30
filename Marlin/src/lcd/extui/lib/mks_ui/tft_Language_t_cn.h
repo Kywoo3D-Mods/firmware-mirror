@@ -228,6 +228,8 @@
 #define ENABLE_PINS_CONF_T_CN           "電機使能腳電平設置"
 #define WIFI_SETTINGS_T_CN              "Wi-Fi參數設置"
 #define ENCODER_SETTINGS_T_CN           "旋鈕設置"
+#define X_MODE_SETTINGS_T_CN            "打印模式"
+#define HOTEND_OFFSET_SETTINGS_T_CN     "擠出頭偏移"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_T_CN  "雙z軸雙限位設置"
 #define Z2_ENABLE_T_CN                    "啟用Z2軸"
@@ -267,9 +269,21 @@
 #define ENCODER_CONF_TITLE_T_CN                 "機器參數>旋鈕設置"
 #define ENCODER_CONF_TEXT_T_CN                  "是否使用旋鈕功能?"
 
+#define DUAL_X_MODE_CONF_TITLE_T_CN             "機器參數>打印模式"
+#define FULL_CONTROL_MODE_T_CN	                "單頭模式"
+#define AUTO_PARK_MODE_T_CN		                "雙頭模式"
+#define DUPLICATION_MODE_T_CN	                "復制模式"
+#define MIRROR_MODE_T_CN		                "鏡像模式"
+
+#define HOTEND_OFFSET_CONF_TITLE_T_CN           "機器參數>擠出頭偏移"
+#define HOTEND_OFFSET_X_T_CN                    "擠出頭2 X軸方向偏移"
+#define HOTEND_OFFSET_Y_T_CN                    "擠出頭2 Y軸方向偏移"
+#define HOTEND_OFFSET_Z_T_CN                    "擠出頭2 Z軸方向偏移"
+
 #define TOOL_TEXT_T_CN                  "工具"
 #define PREHEAT_TEXT_T_CN               "預熱"
 #define MOVE_TEXT_T_CN                  "移動"
+#define TEXT_ZOFFSET_T_CN               "Z offset"
 #define HOME_TEXT_T_CN                  "回零"
 #define PRINT_TEXT_T_CN                 "打印"
 #define EXTRUDE_TEXT_T_CN               "擠出"
@@ -277,6 +291,8 @@
 #define AUTO_LEVELING_TEXT_T_CN         "自動調平"
 #define SET_TEXT_T_CN                   "設置"
 #define MORE_TEXT_T_CN                  "更多"
+#define MORE_GCODE_T_CN                 "G-Code"
+#define MORE_ENTER_GCODE_T_CN           "Enter G-Code"
 
 #define ADD_TEXT_T_CN                   "增加"
 #define DEC_TEXT_T_CN                   "減少"
@@ -507,10 +523,9 @@
 #define EEPROM_READ_TIPS_T_CN         "是否使用EEPROM參數?"
 #define EEPROM_REVERT_TIPS_T_CN       "是否恢復默認參數?"
 
-#define MORE_CUSTOM1_TEXT_T_CN  USER_DESC_1
-#define MORE_CUSTOM2_TEXT_T_CN  USER_DESC_2
-#define MORE_CUSTOM3_TEXT_T_CN  USER_DESC_3
-#define MORE_CUSTOM4_TEXT_T_CN  USER_DESC_4
-#define MORE_CUSTOM5_TEXT_T_CN  USER_DESC_5
-#define MORE_CUSTOM6_TEXT_T_CN  USER_DESC_6
-#define MORE_CUSTOM7_TEXT_T_CN  USER_DESC_7
+#define MORE_CUSTOM1_TEXT_T_CN  MAIN_MENU_ITEM_1_DESC
+#define MORE_CUSTOM2_TEXT_T_CN  MAIN_MENU_ITEM_2_DESC
+#define MORE_CUSTOM3_TEXT_T_CN  MAIN_MENU_ITEM_3_DESC
+#define MORE_CUSTOM4_TEXT_T_CN  MAIN_MENU_ITEM_4_DESC
+#define MORE_CUSTOM5_TEXT_T_CN  MAIN_MENU_ITEM_5_DESC
+#define MORE_CUSTOM6_TEXT_T_CN  MAIN_MENU_ITEM_6_DESC

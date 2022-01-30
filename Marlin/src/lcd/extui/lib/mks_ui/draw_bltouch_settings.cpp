@@ -44,6 +44,7 @@
 extern lv_group_t *g;
 static lv_obj_t *scr, *labelV, *buttonV, *zOffsetText;
 static lv_obj_t *labelExt1, *labelBed;
+static lv_obj_t *buttonExt1, *buttonBed;
 
 static float step_dist = 0.01;
 static float zoffset_diff = 0;
@@ -64,7 +65,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
   char str_1[40];
   switch (obj->mks_obj_id) {
     case ID_BLTOUCH_INIT:
-      bltouch_do_init();
+      bltouch_do_init(true);
       break;
     case ID_BLTOUCH_ZOFFSETPOS:
       sprintf_P(baby_buf, PSTR("M290 Z%s"), dtostrf(step_dist, 1, 3, str_1));
@@ -77,20 +78,22 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       zoffset_diff -= step_dist;
       break;
     case ID_BLTOUCH_SAVE:
-      if (queue.length <= (BUFSIZE - 2)) {
-        #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+      if (!queue.ring_buffer.full(2)) {
+        #if ENABLED(AUTO_BED_LEVELING_BILINEAR) && DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
           for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
             for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
               z_values[x][y] = z_values[x][y] + zoffset_diff;
         #endif
-        TERN_(EEPROM_SETTINGS, (void)settings.save());
-        queue.enqueue_now_P(PSTR("G28 X Y"));
+        queue.enqueue_now_P(PSTR("M500\nG28 X Y"));
         zoffset_diff = 0;
       }
       break;
     case ID_BLTOUCH_TEST:
       sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
-      if (!queue.length) queue.enqueue_now_P(PSTR(str_1));
+      if (!queue.ring_buffer.length) {
+        queue.enqueue_now_P(PSTR(str_1));
+        zoffset_diff = 0;
+      }
       break;
     case ID_BLTOUCH_STEPS:
       if (abs((int)(100 * step_dist)) == 1)
@@ -106,7 +109,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       lv_clear_bltouch_settings();
       if (last_disp_state == DIALOG_UI) lv_draw_ready_print();
       else lv_draw_return_ui();
-      queue.enqueue_now_P(PSTR("G28 X Y"));
+      // queue.enqueue_now_P(PSTR("G28 X Y"));  // fix-wang
+      queue.inject_P(PSTR("G28 X Y"));
       break;
   }
 }
@@ -115,18 +119,27 @@ void lv_draw_bltouch_settings(void) {
   scr = lv_screen_create(BLTOUCH_UI, machine_menu.BLTouchLevelingConfTitle);
   // Create image buttons
   lv_big_button_create(scr, "F:/bmp_Add.bin", machine_menu.BLTouchOffsetpos, INTERVAL_V, titleHeight, event_handler, ID_BLTOUCH_ZOFFSETPOS);
-  lv_obj_t *buttonExt1 = lv_img_create(scr, nullptr);
+
+  //  buttonInitstate = lv_img_create(scr, NULL);
+  lv_obj_t *buttonInitstate = lv_imgbtn_create(scr, NULL);
+  lv_obj_set_event_cb_mks(buttonInitstate, event_handler, ID_BLTOUCH_INIT, NULL, 0);
+  lv_imgbtn_set_src_both(buttonInitstate, "F:/bmp_init_state.bin");
+  lv_obj_set_pos(buttonInitstate, 145, 50);
+
+  lv_obj_t *labelInit = lv_label_create(scr, 125, 115, nullptr);
+  lv_label_set_text(labelInit, machine_menu.BLTouchInit);
+  lv_obj_align(labelInit, buttonInitstate, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+  buttonExt1 = lv_img_create(scr, nullptr);
   lv_img_set_src(buttonExt1, "F:/bmp_ext1_state.bin");
-  lv_obj_set_pos(buttonExt1, 171, 50);
+  lv_obj_set_pos(buttonExt1, 216, 50);
 
-  lv_obj_t *buttonBedstate = lv_img_create(scr, nullptr);
-  lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
-  lv_obj_set_pos(buttonBedstate, 266, 50);
-  labelExt1 = lv_label_create(scr, 161, 115, nullptr);
-  labelBed  = lv_label_create(scr, 256, 115, nullptr);
+  buttonBed = lv_img_create(scr, nullptr);
+  lv_img_set_src(buttonBed, "F:/bmp_bed_state.bin");
+  lv_obj_set_pos(buttonBed, 287, 50);
 
-  lv_obj_align(labelExt1, buttonExt1, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
-  lv_obj_align(labelBed, buttonBedstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+  labelExt1 = lv_label_create(scr, 196, 115, nullptr);
+  labelBed  = lv_label_create(scr, 267, 115, nullptr);
 
   zOffsetText = lv_label_create(scr, 170, 140, nullptr);
   lv_big_button_create(scr, "F:/bmp_Dec.bin", machine_menu.BLTouchOffsetneg, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_BLTOUCH_ZOFFSETNEG);
@@ -171,28 +184,39 @@ void disp_step_dist() {
 void disp_bltouch_z_offset_value() {
   char buf[20];
   char str_1[16];
-  sprintf_P(buf, PSTR("Z Offset : %s mm"), dtostrf(probe.offset.z, 1, 2, str_1) );
+  sprintf_P(buf, PSTR("%s : %s mm"), move_menu.zoffset, dtostrf(probe.offset.z, 1, 2, str_1) );
   lv_label_set_text(zOffsetText, buf);
-
-  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
-  lv_label_set_text(labelExt1, public_buf_l);
+  #if HAS_HOTEND
+    sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+    lv_label_set_text(labelExt1, public_buf_l);
+    lv_obj_align(labelExt1, buttonExt1, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+  #endif
 
   #if HAS_HEATED_BED
     sprintf(public_buf_l, printing_menu.bed_temp, (int)thermalManager.temp_bed.celsius, (int)thermalManager.temp_bed.target);
     lv_label_set_text(labelBed, public_buf_l);
+    lv_obj_align(labelBed, buttonBed, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
   #endif
 
 }
 
-void bltouch_do_init() {
+void bltouch_do_init(bool resetZoffset) {
   char str_1[50];
   //TERN_(HAS_BED_PROBE, probe.offset.z = 0);
   TERN_(HAS_SOFTWARE_ENDSTOPS, soft_endstop._enabled = false);
   //TERN_(HAS_LEVELING, reset_bed_level());
   //TERN_(EEPROM_SETTINGS, (void)settings.save());
   queue.clear();
-  sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
-  queue.enqueue_now_P(PSTR(str_1));
+  if (resetZoffset)
+  {
+    sprintf_P(str_1, PSTR("M851 Z0\nG28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
+  }
+  else
+  {
+    sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
+  }
+  queue.enqueue_now_P(PSTR(str_1));  // fix-wang
+  // queue.inject_P(PSTR(str_1));
 }
 
 void lv_clear_bltouch_settings() { 

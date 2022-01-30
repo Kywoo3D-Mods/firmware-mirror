@@ -46,6 +46,7 @@
 #include "draw_preHeat.h"
 #include "draw_extrusion.h"
 #include "draw_home.h"
+#include "draw_gcode.h"
 #include "draw_more.h"
 #include "draw_move_motor.h"
 #include "draw_fan.h"
@@ -75,10 +76,14 @@
 #include "draw_homing_sensitivity_settings.h"
 #include "draw_baby_stepping.h"
 #include "draw_keyboard.h"
+#include "draw_media_select.h"
 #include "draw_encoder_settings.h"
 #include "draw_touchmi_settings.h"
 #include "draw_bltouch_settings.h"
-
+#if ENABLED(DUAL_X_CARRIAGE)
+  #include "draw_dual_x_carriage_mode.h"
+  #include "draw_hotend_offset_settings.h"
+#endif
 #include "../../../../inc/MarlinConfigPre.h"
 
 #if ENABLED(MKS_WIFI_MODULE)
@@ -190,49 +195,47 @@ extern char public_buf_m[100];
 extern char public_buf_l[30];
 
 typedef struct {
-  uint32_t spi_flash_flag;
-  uint8_t disp_rotation_180;
-  bool multiple_language;
-  uint8_t language;
-  uint8_t leveling_mode;
-  bool from_flash_pic;
-  bool finish_power_off;
-  bool pause_reprint;
-  uint8_t wifi_mode_sel;
-  uint8_t fileSysType;
-  uint8_t wifi_type;
-  bool  cloud_enable;
-  bool  encoder_enable;
+  uint32_t  spi_flash_flag;
+  uint8_t   disp_rotation_180;
+  bool      multiple_language;
+  uint8_t   language;
+  uint8_t   leveling_mode;
+  bool      from_flash_pic;
+  bool      finish_power_off;
+  bool      pause_reprint;
+  uint8_t   wifi_mode_sel;
+  uint8_t   fileSysType;
+  uint8_t   wifi_type;
+  bool      cloud_enable,
+            encoder_enable;
   int   levelingPos[5][2];
-  int   filamentchange_load_length;
-  int   filamentchange_load_speed;
-  int   filamentchange_unload_length;
-  int   filamentchange_unload_speed;
-  int   filament_limit_temper;
-  float pausePosX;
-  float pausePosY;
-  float pausePosZ;
-  uint32_t curFilesize;
+  int       filamentchange_load_length,
+            filamentchange_load_speed,
+            filamentchange_unload_length,
+            filamentchange_unload_speed;
+  celsius_t filament_limit_temp;
+  float     pausePosX, pausePosY, pausePosZ;
+  uint32_t  curFilesize;
 } CFG_ITMES;
 
 typedef struct {
   uint8_t curTempType:1,
           curSprayerChoose:3,
           stepHeat:4;
-  uint8_t leveling_first_time:1,
+  bool    leveling_first_time:1,
           para_ui_page:1,
           configWifi:1,
           command_send:1,
           filament_load_heat_flg:1,
           filament_heat_completed_load:1,
           filament_unload_heat_flg:1,
-          filament_heat_completed_unload:1;
-  uint8_t filament_loading_completed:1,
+          filament_heat_completed_unload:1,
+          filament_loading_completed:1,
           filament_unloading_completed:1,
           filament_loading_time_flg:1,
           filament_unloading_time_flg:1,
-          curSprayerChoose_bak:4;
-  uint8_t tmc_connect_state:1,
+          curSprayerChoose_bak:1,
+          tmc_connect_state:1,
           autoLeveling:1,
           adjustZoffset:1;
   uint8_t wifi_name[32];
@@ -244,23 +247,22 @@ typedef struct {
   uint8_t stepPrintSpeed;
   uint8_t waitEndMoves;
   uint8_t dialogType;
-  uint8_t F[4];
   uint8_t filament_rate;
   uint16_t moveSpeed;
   uint16_t cloud_port;
   uint16_t moveSpeed_bak;
   uint32_t totalSend;
-  uint32_t filament_loading_time;
-  uint32_t filament_unloading_time;
-  uint32_t filament_loading_time_cnt;
-  uint32_t filament_unloading_time_cnt;
+  uint32_t filament_loading_time,
+           filament_unloading_time,
+           filament_loading_time_cnt,
+           filament_unloading_time_cnt;
   float move_dist;
   float desireSprayerTempBak;
-  float current_x_position_bak;
-  float current_y_position_bak;
-  float current_z_position_bak;
-  float current_e_position_bak;
-  float babyStepZoffsetDiff;
+  float current_x_position_bak,
+        current_y_position_bak,
+        current_z_position_bak,
+        current_e_position_bak,
+        babyStepZoffsetDiff;
 } UI_CFG;
 
 typedef enum {
@@ -303,7 +305,7 @@ typedef enum {
   TOOL_UI,
   HARDWARE_TEST_UI,
   WIFI_LIST_UI,
-  KEY_BOARD_UI,
+  KEYBOARD_UI,
   WIFI_TIPS_UI,
   MACHINE_PARA_UI,
   MACHINE_SETTINGS_UI,
@@ -339,7 +341,14 @@ typedef enum {
   WIFI_SETTINGS_UI,
   HOMING_SENSITIVITY_UI,
   ENCODER_SETTINGS_UI,
-  TOUCH_CALIBRATION_UI
+  TOUCH_CALIBRATION_UI,
+  GCODE_UI,
+  MEDIA_SELECT_UI,
+  #if ENABLED(DUAL_X_CARRIAGE)
+    ,
+    DUAL_X_CARRIAGE_MODE_UI,
+    HOTEND_OFFSET_UI
+  #endif
 } DISP_STATE;
 
 typedef struct {
@@ -419,6 +428,13 @@ typedef enum {
   y_sensitivity,
   z_sensitivity,
   z2_sensitivity
+
+  #if ENABLED(DUAL_X_CARRIAGE)
+    ,
+    x_hotend_offset,
+    y_hotend_offset,
+    z_hotend_offset
+  #endif
 } num_key_value_state;
 extern num_key_value_state value;
 
@@ -426,7 +442,8 @@ typedef enum {
   wifiName,
   wifiPassWord,
   wifiConfig,
-  gcodeCommand
+  autoLevelGcodeCommand,
+  GCodeCommand,
 } keyboard_value_state;
 extern keyboard_value_state keyboard_value;
 
@@ -451,6 +468,8 @@ extern lv_style_t style_para_back;
 extern lv_style_t lv_bar_style_indic;
 extern lv_style_t style_btn_pr;
 extern lv_style_t style_btn_rel;
+extern lv_style_t style_check_box_selected;
+extern lv_style_t style_check_box_unselected;
 
 extern lv_point_t line_points[4][2];
 
@@ -462,6 +481,8 @@ extern void preview_gcode_prehandle(char *path);
 extern void update_spi_flash();
 extern void update_gcode_command(int addr,uint8_t *s);
 extern void get_gcode_command(int addr,uint8_t *d);
+extern void lv_serial_capt_hook(void *, uint8_t);
+extern void lv_eom_hook(void *);
 #if HAS_GCODE_PREVIEW
   extern void disp_pre_gcode(int xpos_pixel, int ypos_pixel);
 #endif
@@ -492,7 +513,7 @@ void lv_btn_use_label_style(lv_obj_t *btn);
 void lv_btn_set_style_both(lv_obj_t *btn, lv_style_t *style);
 
 // Create a screen
-lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char* title = nullptr);
+lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char *title = nullptr);
 
 // Create an empty label
 lv_obj_t* lv_label_create_empty(lv_obj_t *par);

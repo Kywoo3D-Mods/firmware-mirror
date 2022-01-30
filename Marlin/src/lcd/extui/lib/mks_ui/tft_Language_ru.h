@@ -25,6 +25,7 @@
 #define TOOL_TEXT_RU                    "инструмент"
 #define PREHEAT_TEXT_RU                 " нагрев"
 #define MOVE_TEXT_RU                    "движение"
+#define TEXT_ZOFFSET_RU                 "Z offset"
 #define HOME_TEXT_RU                    "домой"
 #define PRINT_TEXT_RU                   " печать"
 #define EXTRUDE_TEXT_RU                 "экструзия"
@@ -32,6 +33,8 @@
 #define AUTO_LEVELING_TEXT_RU           "aвтоуровень"
 #define SET_TEXT_RU                     "настройки"
 #define MORE_TEXT_RU                    "больше"
+#define MORE_GCODE_RU                   "G-код"
+#define MORE_ENTER_GCODE_RU             "Введите G-код"
 
 #define ADD_TEXT_RU                     "добавить"
 #define DEC_TEXT_RU                     "уменьшить"
@@ -192,7 +195,7 @@
 #define TITLE_HOME_RU                       "Home"
 #define TITLE_EXTRUDE_RU                    "экструзия"
 #define TITLE_LEVELING_RU                   "уровень"
-#define TITLE_MLEVELING_RU                   "углы"
+#define TITLE_MLEVELING_RU                  "углы"
 #define TITLE_SET_RU                        "настройки"
 #define TITLE_MORE_RU                       "больше"
 #define TITLE_CHOOSEFILE_RU                 "файла"
@@ -255,17 +258,13 @@
 #define EEPROM_SETTINGS_READ_RU       "Чтение настроек из EEPROM"
 #define EEPROM_SETTINGS_REVERT_RU     "Bосстановить заводские настройки по умолчанию"
 
-#define MORE_CUSTOM1_TEXT_RU  USER_DESC_1
-#define MORE_CUSTOM2_TEXT_RU  USER_DESC_2
-#define MORE_CUSTOM3_TEXT_RU  USER_DESC_3
-#define MORE_CUSTOM4_TEXT_RU  USER_DESC_4
-#define MORE_CUSTOM5_TEXT_RU  USER_DESC_5
-#define MORE_CUSTOM6_TEXT_RU  USER_DESC_6
-#define MORE_CUSTOM7_TEXT_RU  USER_DESC_7
+#define MORE_CUSTOM1_TEXT_RU  MAIN_MENU_ITEM_1_DESC
+#define MORE_CUSTOM2_TEXT_RU  MAIN_MENU_ITEM_2_DESC
+#define MORE_CUSTOM3_TEXT_RU  MAIN_MENU_ITEM_3_DESC
+#define MORE_CUSTOM4_TEXT_RU  MAIN_MENU_ITEM_4_DESC
+#define MORE_CUSTOM5_TEXT_RU  MAIN_MENU_ITEM_5_DESC
+#define MORE_CUSTOM6_TEXT_RU  MAIN_MENU_ITEM_6_DESC
 
-//Malderin translate
-//
-//
 #define EEPROM_STORE_TIPS_RU          "Cохранить настройки в EEPROM?"
 #define EEPROM_READ_TIPS_RU           "читать настройки из EEPROM?"
 #define EEPROM_REVERT_TIPS_RU         "Cбросить настройки к значениям по умолчанию?"
@@ -285,7 +284,8 @@
 #define ADVANCE_CONFIG_RU              "Pасширенные настройки"
 #define MACHINE_FILAMENT_CONFIG_RU     "Hастройки филамента"
 #define ENCODER_SETTINGS_RU            "Hастройки энкодера"
-
+#define X_MODE_SETTINGS_RU             "X-mode"
+#define EXTRUDE_OFFSET_SETTINGS_RU     "T-offset"
 
 #define LEVELING_CONF_TITLE_RU          "Hастройки принтера>Hастройки уровня"
 #define LEVELING_PARA_CONF_RU           "настройки уровня"
@@ -381,5 +381,16 @@
 
 #define ENCODER_CONF_TITLE_RU           "Hастройки принтера>Hастройки энкодера"
 #define ENCODER_CONF_TEXT_RU            "энкодер используется?"
+
+#define DUAL_X_MODE_CONF_TITLE_RU       "Machine Settings>Dual x mode"
+#define FULL_CONTROL_MODE_RU	        "Full control mode"
+#define AUTO_PARK_MODE_RU		        "Auto park mode"
+#define DUPLICATION_MODE_RU	            "Duplication mode"
+#define MIRROR_MODE_RU		            "Mirrored mode"
+
+#define HOTEND_OFFSET_SETTINGS_RU       "Machine Settings>Hotend offset"
+#define HOTEND_OFFSET_X_RU              "Hotend X2 offset"
+#define HOTEND_OFFSET_Y_RU              "Hotend Y2 offset"
+#define HOTEND_OFFSET_Z_RU              "Hotend Z2 offset"
 
 //end of Malderin translate

@@ -52,7 +52,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_manual_level_pos_settings();
       break;
     case ID_LEVEL_COMMAND:
-      keyboard_value = gcodeCommand;
+      keyboard_value = autoLevelGcodeCommand;
       lv_clear_level_settings();
       lv_draw_keyboard();
       break;
@@ -66,7 +66,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       case ID_LEVEL_BLTOUCH:
         last_disp_state = LEVELING_PARA_UI;
         lv_clear_level_settings();
-        bltouch_do_init();
+        bltouch_do_init(false);
         lv_draw_bltouch_settings();
         break;
     #endif

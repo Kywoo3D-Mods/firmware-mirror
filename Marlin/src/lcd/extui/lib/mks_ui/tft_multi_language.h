@@ -250,7 +250,9 @@ typedef struct machine_common_disp{
   const char *PausePosition;
   const char *WifiSettings;
   const char *EncoderSettings;
-
+  const char *xModeSettings;
+  const char *hotendOffsetSettings;
+  
   const char *Z2ConfTitle;
   const char *Z2Enable;
   const char *Z2EndstopEnable;
@@ -301,6 +303,17 @@ typedef struct machine_common_disp{
 
   const char *EncoderConfTitle;
   const char *EncoderConfText;
+
+  const char *XmodeConfigTitle;
+  const char *fullControl;
+  const char *autoPark;
+  const char *duplication;
+  const char *mirror;
+
+  const char *hotendOffsetConfigTitle;
+  const char *hotendXoffset;
+  const char *hotendYoffset;
+  const char *hotendZoffset;
 
 } machine_common_def;
 
@@ -373,6 +386,7 @@ typedef struct move_menu_disp {
   const char *step_01mm;
   const char *step_1mm;
   const char *step_10mm;
+  const char *zoffset;
   const char *back;
 } move_menu_def;
 
@@ -489,6 +503,8 @@ typedef struct more_menu_disp {
   const char *custom5;
   const char *custom6;
   const char *custom7;
+  const char *gcode;
+  const char *entergcode;
   const char *back;
 } more_menu_def;
 
@@ -731,6 +747,14 @@ typedef struct tool_menu_disp {
 
 extern tool_menu_def tool_menu;
 
+typedef struct media_select_menu_disp {
+  const char *title;
+  const char *sd_disk;
+  const char *usb_disk;
+} media_select_menu_def;
+
+extern media_select_menu_def media_select_menu;
+
 typedef struct MachinePara_menu_disp {
   const char *title;
   const char *MachineSetting;
@@ -797,6 +821,7 @@ extern eeprom_def eeprom_menu;
 #define TEXT_01MM           "0.1 mm"
 #define TEXT_1MM            "1 mm"
 #define TEXT_10MM           "10 mm"
+#define TEXT_ZOFFSET        "Z offset"
 
 #define EXTRUDE_1MM_TEXT    "1 mm"
 #define EXTRUDE_5MM_TEXT    "5 mm"
@@ -859,7 +884,7 @@ extern eeprom_def eeprom_menu;
 #define DIALOG_UPLOAD_SPEED_EN          "Speed"
 #define DIALOG_UPDATE_WIFI_FIRMWARE_EN  "Updating wifi model firmware"
 #define DIALOG_UPDATE_WIFI_WEB_EN       "Updating wifi model web data"
-#define DIALOG_UPDATE_NO_DEVICE_EN      "Please check\nwether memory device insert!"
+#define DIALOG_UPDATE_NO_DEVICE_EN      "Please check whether\nmemory device inserted!"
 
 #define ZOFFSET_STEP001                 "0.01 mm"
 #define ZOFFSET_STEP01                  "0.1 mm"

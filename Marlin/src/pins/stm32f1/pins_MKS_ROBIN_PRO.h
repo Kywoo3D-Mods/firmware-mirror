@@ -31,7 +31,7 @@
   #error "MKS Robin pro supports up to 3 hotends / E-steppers. Comment out this line to continue."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin pro"
+#define BOARD_INFO_NAME "Kywoo3D"
 
 #define BOARD_NO_NATIVE_USB
 
@@ -178,10 +178,17 @@
 //#define MAX6675_SS_PIN                    PE5   // TC1 - CS1
 //#define MAX6675_SS_PIN                    PF11  // TC2 - CS2
 
-#define POWER_LOSS_PIN                      PA2   // PW_DET
-#define PS_ON_PIN                           PG11  // PW_OFF
+#if ENABLED(PSU_CONTROL)
+#ifndef PS_ON_PIN
+  #define PS_ON_PIN PG11 //PW_OFF, you can change it to other pin
+#endif
+#ifndef KILL_PIN
+ #define KILL_PIN PA2 //PW_DET, you can change it to other pin
+#endif
+  #define KILL_PIN_INVERTING false //true : HIGH level trigger
+#endif
 #define FIL_RUNOUT_PIN                      PA4   // MT_DET1
-//#define FIL_RUNOUT_PIN                    PE6   // MT_DET2
+#define FIL_RUNOUT2_PIN                     PE6   // MT_DET2
 //#define FIL_RUNOUT_PIN                    PG14  // MT_DET3
 
 //
@@ -210,20 +217,30 @@
  * If the screen stays white, disable 'LCD_RESET_PIN'
  * to let the bootloader init the screen.
  */
-#if HAS_FSMC_GRAPHICAL_TFT
+#if HAS_FSMC_TFT
   #define FSMC_CS_PIN                       PD7   // NE4
   #define FSMC_RS_PIN                       PD11  // A0
+  #define FSMC_DMA_DEV                      DMA2
+  #define FSMC_DMA_CHANNEL               DMA_CH5
+  #define LCD_USE_DMA_FSMC                        // Use DMA transfers to send data to the TFT
+  #define TFT_CS_PIN                 FSMC_CS_PIN
+  #define TFT_RS_PIN                 FSMC_RS_PIN
 
   #define LCD_RESET_PIN                     PF6
   #define LCD_BACKLIGHT_PIN                 PD13
+  #define TFT_RESET_PIN            LCD_RESET_PIN
+  #define TFT_BACKLIGHT_PIN    LCD_BACKLIGHT_PIN
+
+  #define TFT_BUFFER_SIZE                  14400
 
   #if NEED_TOUCH_PINS
-    #define TOUCH_CS_PIN                    PA7
-  #else
+    #define TOUCH_BUTTONS_HW_SPI
+    #define TOUCH_BUTTONS_HW_SPI_DEVICE        2
+    #define TOUCH_CS_PIN                    PA7   // SPI2_NSS
+    #define TOUCH_SCK_PIN                   PB13  // SPI2_SCK
+    #define TOUCH_MISO_PIN                  PB14  // SPI2_MISO
+    #define TOUCH_MOSI_PIN                  PB15  // SPI2_MOSI
     #define BEEPER_PIN                      PC5
-    #define BTN_ENC                         PG2
-    #define BTN_EN1                         PG5
-    #define BTN_EN2                         PG4
   #endif
 
 #elif IS_TFTGLCD_PANEL
@@ -270,11 +287,32 @@
 #endif
 
 #ifndef BOARD_ST7920_DELAY_1
-  #define BOARD_ST7920_DELAY_1     DELAY_NS(125)
+  #define BOARD_ST7920_DELAY_1              DELAY_NS(125)
 #endif
 #ifndef BOARD_ST7920_DELAY_2
-  #define BOARD_ST7920_DELAY_2     DELAY_NS(125)
+  #define BOARD_ST7920_DELAY_2              DELAY_NS(125)
 #endif
 #ifndef BOARD_ST7920_DELAY_3
-  #define BOARD_ST7920_DELAY_3     DELAY_NS(125)
+  #define BOARD_ST7920_DELAY_3              DELAY_NS(125)
+#endif
+
+#if ENABLED(SRAM_EEPROM_EMULATION)
+  #undef NO_EEPROM_SELECTED
+#endif
+#if EITHER(NO_EEPROM_SELECTED, FLASH_EEPROM_EMULATION)
+  #define FLASH_EEPROM_EMULATION
+  #define EEPROM_PAGE_SIZE     (0x800U) // 2KB
+  #define EEPROM_START_ADDRESS (0x8000000UL + (STM32_FLASH_SIZE) * 1024UL - (EEPROM_PAGE_SIZE) * 2UL)
+  #define MARLIN_EEPROM_SIZE    EEPROM_PAGE_SIZE  // 2KB
+#endif
+
+#define SPI_DEVICE                             2
+
+#define HAS_SPI_FLASH                          1
+#if HAS_SPI_FLASH
+  #define SPI_FLASH_SIZE               0x1000000  // 16MB
+  #define W25QXX_CS_PIN                     PB12  // Flash chip-select
+  #define W25QXX_MOSI_PIN                   PB15
+  #define W25QXX_MISO_PIN                   PB14
+  #define W25QXX_SCK_PIN                    PB13
 #endif

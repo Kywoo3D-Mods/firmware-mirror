@@ -34,7 +34,7 @@
 // RGB565 color picker:  https://trolsoft.ru/en/articles/rgb565-color-picker
 
 #define COLOR_BLACK           0x0000  // #000000
-#define COLOR_WHITE           0xFFFF  // #FFFFFF
+#define COLOR_WHITE           0xC618  // #FFFFFF
 #define COLOR_SILVER          0xC618  // #C0C0C0
 #define COLOR_GREY            0x7BEF  // #808080
 #define COLOR_DARKGREY        0x4208  // #404040
@@ -49,15 +49,15 @@
 #define COLOR_YELLOW          0xFFE0  // #FFFF00
 #define COLOR_MAGENTA         0xF81F  // #FF00FF
 #define COLOR_FUCHSIA         0xF81F  // #FF00FF
-#define COLOR_CYAN            0x07FF  // #00FFFF
-#define COLOR_AQUA            0x07FF  // #00FFFF
-#define COLOR_DODGER_BLUE     0x041F  // #0080FF
+#define COLOR_CYAN            0x061F  // #00FFFF
+#define COLOR_AQUA            0x061F  // #00FFFF
+#define COLOR_DODGER_BLUE     0x061F  // #0080FF
 #define COLOR_VIVID_VIOLET    0x7933  // #772399
 
 #define COLOR_DARK_PURPLE     0x9930  // #992380
 
 #define COLOR_MAROON          0x7800  // #800000
-#define COLOR_GREEN           0x03E0  // #008000
+#define COLOR_GREEN           0x7FE0  // #008000
 #define COLOR_NAVY            0x000F  // #000080
 #define COLOR_OLIVE           0x8400  // #808000
 #define COLOR_PURPLE          0x8010  // #800080
@@ -71,13 +71,13 @@
 #define COLOR_DARK_PURPLE     0x9930  // #992380
 
 #ifndef COLOR_BACKGROUND
-  #define COLOR_BACKGROUND    0x20AC  // #1E156E
+  #define COLOR_BACKGROUND    0x0000  // #1E156E
 #endif
 #ifndef COLOR_SELECTION_BG
-  #define COLOR_SELECTION_BG  0x9930  // #992380
+  #define COLOR_SELECTION_BG  0x0000  // #992380
 #endif
 #ifndef COLOR_WEBSITE_URL
-  #define COLOR_WEBSITE_URL   0x03B7  // #0075BD
+  #define COLOR_WEBSITE_URL   0xFFFF  // #0075BD
 #endif
 
 #ifndef COLOR_INACTIVE
@@ -131,7 +131,7 @@
 #endif
 
 #ifndef COLOR_STATUS_MESSAGE
-  #define COLOR_STATUS_MESSAGE    COLOR_YELLOW
+  #define COLOR_STATUS_MESSAGE    COLOR_DODGER_BLUE
 #endif
 
 #ifndef COLOR_CONTROL_ENABLED
@@ -144,14 +144,14 @@
   #define COLOR_CONTROL_CANCEL    COLOR_SCARLET
 #endif
 #ifndef COLOR_CONTROL_CONFIRM
-  #define COLOR_CONTROL_CONFIRM   COLOR_VIVID_GREEN
+  #define COLOR_CONTROL_CONFIRM   COLOR_GREEN
 #endif
 #ifndef COLOR_BUSY
-  #define COLOR_BUSY              COLOR_SILVER
+  #define COLOR_BUSY              COLOR_DODGER_BLUE
 #endif
 
 #ifndef COLOR_MENU_TEXT
-  #define COLOR_MENU_TEXT         COLOR_YELLOW
+  #define COLOR_MENU_TEXT         COLOR_SILVER
 #endif
 #ifndef COLOR_MENU_VALUE
   #define COLOR_MENU_VALUE        COLOR_WHITE

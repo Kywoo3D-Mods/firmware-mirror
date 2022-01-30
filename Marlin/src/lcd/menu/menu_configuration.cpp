@@ -108,7 +108,6 @@ void menu_advanced_settings();
 
   void menu_tool_change() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
     #if ENABLED(TOOLCHANGE_FILAMENT_SWAP)
       static constexpr float max_extrude = TERN(PREVENT_LENGTHY_EXTRUDE, EXTRUDE_MAXLENGTH, 500);
       #if ENABLED(TOOLCHANGE_PARK)
@@ -172,7 +171,6 @@ void menu_advanced_settings();
     };
 
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
     #if ENABLED(DUAL_X_CARRIAGE)
       EDIT_ITEM_FAST(float42_52, MSG_HOTEND_OFFSET_X, &hotend_offset[1].x, float(X2_HOME_POS - 25), float(X2_HOME_POS + 25), _recalc_offsets);
     #else
@@ -187,31 +185,7 @@ void menu_advanced_settings();
   }
 #endif
 
-#if ENABLED(DUAL_X_CARRIAGE)
 
-  void menu_idex() {
-    const bool need_g28 = axes_should_home(_BV(Y_AXIS)|_BV(Z_AXIS));
-
-    START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
-
-    GCODES_ITEM(MSG_IDEX_MODE_AUTOPARK,  PSTR("M605S1\nG28X\nG1X0"));
-    GCODES_ITEM(MSG_IDEX_MODE_DUPLICATE, need_g28
-      ? PSTR("M605S1\nT0\nG28\nM605S2\nG28X\nG1X0")         // If Y or Z is not homed, do a full G28 first
-      : PSTR("M605S1\nT0\nM605S2\nG28X\nG1X0")
-    );
-    GCODES_ITEM(MSG_IDEX_MODE_MIRRORED_COPY, need_g28
-      ? PSTR("M605S1\nT0\nG28\nM605S2\nG28X\nG1X0\nM605S3") // If Y or Z is not homed, do a full G28 first
-      : PSTR("M605S1\nT0\nM605S2\nG28 X\nG1X0\nM605S3")
-    );
-    GCODES_ITEM(MSG_IDEX_MODE_FULL_CTRL, PSTR("M605S0\nG28X"));
-
-    EDIT_ITEM(float42_52, MSG_IDEX_DUPE_GAP, &duplicate_extruder_x_offset, (X2_MIN_POS) - (X1_MIN_POS), (X_BED_SIZE) - 20);
-
-    END_MENU();
-  }
-
-#endif
 
 #if ENABLED(BLTOUCH)
 
@@ -229,7 +203,6 @@ void menu_advanced_settings();
 
   void menu_bltouch() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
     ACTION_ITEM(MSG_BLTOUCH_RESET, bltouch._reset);
     ACTION_ITEM(MSG_BLTOUCH_SELFTEST, bltouch._selftest);
     ACTION_ITEM(MSG_BLTOUCH_DEPLOY, bltouch._deploy);
@@ -485,7 +458,7 @@ void menu_configuration() {
   const bool busy = printer_busy();
 
   START_MENU();
-  BACK_ITEM(MSG_MAIN);
+
 
   //
   // Debug Menu when certain options are enabled
@@ -507,7 +480,7 @@ void menu_configuration() {
   SUBMENU(MSG_ADVANCED_SETTINGS, menu_advanced_settings);
 
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
-    SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
+    //SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
   #elif HAS_BED_PROBE
     EDIT_ITEM(LCD_Z_OFFSET_TYPE, MSG_ZPROBE_ZOFFSET, &probe.offset.z, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX);
   #endif
@@ -529,11 +502,11 @@ void menu_configuration() {
     #endif
 
     #if ENABLED(DUAL_X_CARRIAGE)
-      SUBMENU(MSG_IDEX_MENU, menu_idex);
+      //SUBMENU(MSG_IDEX_MENU, menu_idex);
     #endif
 
     #if ENABLED(BLTOUCH)
-      SUBMENU(MSG_BLTOUCH, menu_bltouch);
+      //SUBMENU(MSG_BLTOUCH, menu_bltouch);
     #endif
 
     #if ENABLED(TOUCH_MI_PROBE)
@@ -545,7 +518,7 @@ void menu_configuration() {
   // Set single nozzle filament retract and prime length
   //
   #if HAS_MULTI_EXTRUDER
-    SUBMENU(MSG_TOOL_CHANGE, menu_tool_change);
+    //SUBMENU(MSG_TOOL_CHANGE, menu_tool_change);
     #if ENABLED(TOOLCHANGE_MIGRATION_FEATURE)
       SUBMENU(MSG_TOOL_MIGRATION, menu_toolchange_migration);
     #endif
@@ -559,11 +532,11 @@ void menu_configuration() {
   #endif
 
   #if HAS_FILAMENT_SENSOR
-    EDIT_ITEM(bool, MSG_RUNOUT_SENSOR, &runout.enabled, runout.reset);
+    //EDIT_ITEM(bool, MSG_RUNOUT_SENSOR, &runout.enabled, runout.reset);
   #endif
 
   #if ENABLED(POWER_LOSS_RECOVERY)
-    EDIT_ITEM(bool, MSG_OUTAGE_RECOVERY, &recovery.enabled, recovery.changed);
+    //EDIT_ITEM(bool, MSG_OUTAGE_RECOVERY, &recovery.enabled, recovery.changed);
   #endif
 
   // Preheat configurations
@@ -576,12 +549,7 @@ void menu_configuration() {
     EDIT_ITEM(bool, MSG_SOUND, &ui.buzzer_enabled, []{ ui.chirp(); });
   #endif
 
-  #if ENABLED(EEPROM_SETTINGS)
-    ACTION_ITEM(MSG_STORE_EEPROM, ui.store_settings);
-    if (!busy) ACTION_ITEM(MSG_LOAD_EEPROM, ui.load_settings);
-  #endif
 
-  if (!busy) ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
 
   END_MENU();
 }

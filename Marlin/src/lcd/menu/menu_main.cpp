@@ -62,11 +62,27 @@
   #include "../../feature/repeat.h"
 #endif
 
-void menu_tune();
+//void menu_tune();
 void menu_cancelobject();
-void menu_motion();
-void menu_temperature();
+//void menu_motion();
+//void menu_temperature();
 void menu_configuration();
+
+void menu_idex() {
+  const bool need_g28 = axes_should_home(_BV(Y_AXIS)|_BV(Z_AXIS));
+  START_MENU();
+  GCODES_ITEM(MSG_IDEX_MODE_AUTOPARK,  PSTR("M605 S1\nG28\nG1X0"));
+  GCODES_ITEM(MSG_IDEX_MODE_DUPLICATE, need_g28
+      ? PSTR("M605 S1\nT0\nG28\nM605 S2 X150\nG28 X\nG1 X75")               
+      : PSTR("M605 S1\nT0\nM605 S2 X150\nG28 X\nG1 X75") 
+    );
+    GCODES_ITEM(MSG_IDEX_MODE_MIRRORED_COPY, need_g28
+      ? PSTR("M605 S1\nT0\nG28\nM605 S2 X180\nG28 X\nG1 X60\nM605 S3 X200")  
+      : PSTR("M605 S1\nT0\nM605 S2 X180\nG28 X\nG1 X60\nM605 S3 X200")  
+    );
+  GCODES_ITEM(MSG_IDEX_MODE_FULL_CTRL, PSTR("M605 S0\nG28 X"));
+  END_MENU();
+}
 
 #if HAS_POWER_MONITOR
   void menu_power_monitor();
@@ -252,8 +268,7 @@ void menu_main() {
   ;
 
   START_MENU();
-  BACK_ITEM(MSG_INFO_SCREEN);
-
+  ACTION_ITEM(MSG_STORE_EEPROM, ui.store_settings);
   if (busy) {
     #if MACHINE_CAN_PAUSE
       ACTION_ITEM(MSG_PAUSE_PRINT, ui.pause_print);
@@ -273,7 +288,7 @@ void menu_main() {
         ACTION_ITEM(MSG_END_LOOPS, repeat.cancel);
     #endif
 
-    SUBMENU(MSG_TUNE, menu_tune);
+    //SUBMENU(MSG_TUNE, menu_tune);
 
     #if ENABLED(CANCEL_OBJECTS) && DISABLED(SLIM_LCD_MENUS)
       SUBMENU(MSG_CANCEL_OBJECT, []{ editable.int8 = -1; ui.goto_screen(menu_cancelobject); });
@@ -323,7 +338,7 @@ void menu_main() {
       SUBMENU(MSG_PREHEAT_CUSTOM, menu_preheat_only);
     #endif
 
-    SUBMENU(MSG_MOTION, menu_motion);
+    //SUBMENU(MSG_MOTION, menu_motion);
   }
 
   #if HAS_CUTTER
@@ -331,7 +346,7 @@ void menu_main() {
   #endif
 
   #if HAS_TEMPERATURE
-    SUBMENU(MSG_TEMPERATURE, menu_temperature);
+    //SUBMENU(MSG_TEMPERATURE, menu_temperature);
   #endif
 
   #if HAS_POWER_MONITOR
@@ -376,16 +391,15 @@ void menu_main() {
   #if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
     SUBMENU(MSG_LEDS, menu_led);
   #endif
+  
+  SUBMENU(MSG_IDEX_MENU, menu_idex);
+  #if HAS_MULTI_LANGUAGE
+    SUBMENU(LANGUAGE, menu_language);
+  #endif
 
   //
   // Switch power on/off
   //
-  #if ENABLED(PSU_CONTROL)
-    if (powersupply_on)
-      GCODES_ITEM(MSG_SWITCH_PS_OFF, PSTR("M81"));
-    else
-      GCODES_ITEM(MSG_SWITCH_PS_ON, PSTR("M80"));
-  #endif
 
   #if BOTH(HAS_ENCODER_WHEEL, SDSUPPORT)
 
@@ -400,23 +414,7 @@ void menu_main() {
         ACTION_ITEM(MSG_RUN_AUTO_FILES, card.autofile_begin);
       #endif
 
-      if (card_detected) {
-        if (!card_open) {
-          #if PIN_EXISTS(SD_DETECT)
-            GCODES_ITEM(MSG_CHANGE_MEDIA, PSTR("M21"));
-          #else
-            GCODES_ITEM(MSG_RELEASE_MEDIA, PSTR("M22"));
-          #endif
-          SUBMENU(MSG_MEDIA_MENU, MEDIA_MENU_GATEWAY);
-        }
-      }
-      else {
-        #if PIN_EXISTS(SD_DETECT)
-          ACTION_ITEM(MSG_NO_MEDIA, nullptr);
-        #else
-          GCODES_ITEM(MSG_ATTACH_MEDIA, PSTR("M21"));
-        #endif
-      }
+      
     }
 
   #endif // HAS_ENCODER_WHEEL && SDSUPPORT
@@ -475,9 +473,8 @@ void menu_main() {
     }
   #endif
 
-  #if HAS_MULTI_LANGUAGE
-    SUBMENU(LANGUAGE, menu_language);
-  #endif
+  
+
 
   END_MENU();
 }

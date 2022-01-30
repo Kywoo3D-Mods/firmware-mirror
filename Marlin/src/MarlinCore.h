@@ -103,7 +103,7 @@ bool pin_is_protected(const pin_t pin);
 
 #if HAS_KILL
   #ifndef KILL_PIN_STATE
-    #define KILL_PIN_STATE LOW
+    #define KILL_PIN_STATE HIGH
   #endif
   inline bool kill_state() { return READ(KILL_PIN) == KILL_PIN_STATE; }
 #endif

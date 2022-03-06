@@ -31,7 +31,7 @@ The `main` branch is to keep tools/docs that help maintain this mirror.<br>
 |Version|Mods|Binary|Source|
 |---|---|---|---|
 |v2.0.1 | - | 🟢 [Downloads][tycoon-dl] | 🟢 [`tycoon-v2`][tycoon-v2-source]
-|v2.0.1 | High temperature<sup>[?][ht-mod]</sup> | 🟢 [Downloads][tycoon-dl] | ⚪ _missing_
+|v2.0.1 | High temperature<sup>[?][ht-mod]</sup> | 🟢 [Downloads][tycoon-dl] | 🟠 [`tycoon-v2-hightemp`][tycoon-v2-hightemp-source] <sup>see #1</sup>
 |v2.1.0 | Auto shutdown<sup>[?][as-mod]</sup> | 🟢 [Downloads][tycoon-dl] | ⚪ _missing_
 
 ## Tycoon Max
@@ -44,8 +44,8 @@ The `main` branch is to keep tools/docs that help maintain this mirror.<br>
 
 |Version|Mods|Binary|Source|
 |---|---|---|---|
-|v2.0.1 | - | 🟢 [Downloads][tycoon-max-dl] | 🟢 [`tycoon-v2`][tycoon-v2-source]
-|v2.0.1 | High temperature<sup>[?][ht-mod]</sup> | 🟢 [Downloads][tycoon-max-dl] | ⚪ _missing_
+|v2.0.1 | - | 🟢 [Downloads][tycoon-max-dl] | 🟠 [`tycoon-max-v2`][tycoon-max-v2-source] <sup>see #1</sup>
+|v2.0.1 | High temperature<sup>[?][ht-mod]</sup> | 🟢 [Downloads][tycoon-max-dl] | 🟠 [`tycoon-max-v2-hightemp`][tycoon-max-v2-hightemp-source] <sup>see #1</sup>
 |v2.1.0 | Auto shutdown<sup>[?][as-mod]</sup> | 🟢 [Downloads][tycoon-max-dl] | ⚪ _missing_
 
 ## Tycoon Slim
@@ -58,7 +58,7 @@ The `main` branch is to keep tools/docs that help maintain this mirror.<br>
 
 |Version|Mods|Binary|Source|
 |---|---|---|---|
-|v2.1.0 | (Auto shutdown<sup>[1](#notes)</sup>) | 🟢 [Downloads][tycoon-idex-dl] | 🔴 Closed<sup>[2](#notes)</sup>
+|v2.1.0 | (Auto shutdown<sup>[1](#notes)</sup>) | 🟢 [Downloads][tycoon-idex-dl] | 🟠 [`tycoon-idex-v2`][tycoon-idex-v2-source] <sup>see #1</sup>
 
 ## Wifi Module<sup>[?][wifi-mod]</sup>
 
@@ -109,4 +109,8 @@ Notably they switched the UI from MKS's lvgl based UI, to Marlin's "Color UI".
 [wifi-dl]: https://www.kywoo3d.com/pages/wifi-driver-instruction-download "Wifi downloads"
 [tycoon-v1-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-v1 "tycoon-v1 source"
 [tycoon-v2-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-v2 "tycoon-v2 source"
+[tycoon-v2-hightemp-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-v2-hightemp "tycoon-v2-hightemp source"
 [tycoon-max-v1-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-max-v1 "tycoon-max-v1 source"
+[tycoon-max-v2-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-max-v2-hightemp "tycoon-max-v2-hightemp source"
+[tycoon-max-v2-hightemp-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-max-v2 "tycoon-max-v2 source"
+[tycoon-idex-v2-source]: https://github.com/Kywoo3D-Mods/firmware-mirror/tree/tycoon-idex-v2 "tycoon-idex-v2 source"

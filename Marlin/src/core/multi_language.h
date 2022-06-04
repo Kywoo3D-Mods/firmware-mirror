@@ -31,7 +31,13 @@
 typedef const char Language_Str[];
 #define LSTR PROGMEM Language_Str
 
-#ifdef LCD_LANGUAGE_5
+#ifdef LCD_LANGUAGE_8
+  #define NUM_LANGUAGES 8
+#elif defined(LCD_LANGUAGE_7)
+  #define NUM_LANGUAGES 7
+#elif defined(LCD_LANGUAGE_6)
+  #define NUM_LANGUAGES 6
+#elif defined(LCD_LANGUAGE_5)
   #define NUM_LANGUAGES 5
 #elif defined(LCD_LANGUAGE_4)
   #define NUM_LANGUAGES 4
@@ -57,6 +63,15 @@ typedef const char Language_Str[];
 #ifndef LCD_LANGUAGE_5
   #define LCD_LANGUAGE_5 LCD_LANGUAGE_4
 #endif
+#ifndef LCD_LANGUAGE_6
+  #define LCD_LANGUAGE_6 LCD_LANGUAGE_5
+#endif
+#ifndef LCD_LANGUAGE_7
+  #define LCD_LANGUAGE_7 LCD_LANGUAGE_6
+#endif
+#ifndef LCD_LANGUAGE_8
+  #define LCD_LANGUAGE_8 LCD_LANGUAGE_7
+#endif
 
 #define _GET_LANG(LANG) Language_##LANG
 #define GET_LANG(LANG) _GET_LANG(LANG)
@@ -64,16 +79,22 @@ typedef const char Language_Str[];
 #if NUM_LANGUAGES > 1
   #define HAS_MULTI_LANGUAGE 1
   #define GET_TEXT(MSG) ( \
-    ui.language == 4 ? GET_LANG(LCD_LANGUAGE_5)::MSG : \
-    ui.language == 3 ? GET_LANG(LCD_LANGUAGE_4)::MSG : \
-    ui.language == 2 ? GET_LANG(LCD_LANGUAGE_3)::MSG : \
+    ui.language == 0 ? GET_LANG(LCD_LANGUAGE  )::MSG : \
     ui.language == 1 ? GET_LANG(LCD_LANGUAGE_2)::MSG : \
-                       GET_LANG(LCD_LANGUAGE  )::MSG   )
+    ui.language == 2 ? GET_LANG(LCD_LANGUAGE_3)::MSG : \
+    ui.language == 3 ? GET_LANG(LCD_LANGUAGE_4)::MSG : \
+    ui.language == 4 ? GET_LANG(LCD_LANGUAGE_5)::MSG : \
+    ui.language == 5 ? GET_LANG(LCD_LANGUAGE_6)::MSG : \
+    ui.language == 6 ? GET_LANG(LCD_LANGUAGE_7)::MSG : \
+                       GET_LANG(LCD_LANGUAGE_8)::MSG   )
   #define MAX_LANG_CHARSIZE _MAX(GET_LANG(LCD_LANGUAGE  )::CHARSIZE, \
                                  GET_LANG(LCD_LANGUAGE_2)::CHARSIZE, \
                                  GET_LANG(LCD_LANGUAGE_3)::CHARSIZE, \
                                  GET_LANG(LCD_LANGUAGE_4)::CHARSIZE, \
-                                 GET_LANG(LCD_LANGUAGE_5)::CHARSIZE  )
+                                 GET_LANG(LCD_LANGUAGE_5)::CHARSIZE, \
+                                 GET_LANG(LCD_LANGUAGE_6)::CHARSIZE, \
+                                 GET_LANG(LCD_LANGUAGE_7)::CHARSIZE, \
+                                 GET_LANG(LCD_LANGUAGE_8)::CHARSIZE  )
 #else
   #define GET_TEXT(MSG) GET_LANG(LCD_LANGUAGE)::MSG
   #define MAX_LANG_CHARSIZE LANG_CHARSIZE

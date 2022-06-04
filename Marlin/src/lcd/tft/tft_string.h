@@ -28,7 +28,7 @@ extern const uint8_t font10x20[];
 
 extern const uint8_t Helvetica12Bold[];
 
-extern const uint8_t Helvetica14[], Helvetica14ru[], Tahoma14[], Helvetica14_symbols[];
+extern const uint8_t Helvetica14[], Helvetica14ru[], Tahoma14[], Helvetica14_symbols[],yahei_18_zh_cn[];
 extern const uint8_t Helvetica18[], Helvetica18ru[], Tahoma18[], Helvetica18_symbols[];
 extern const uint8_t Tahoma36bold_num[];
 

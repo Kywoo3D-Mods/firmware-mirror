@@ -749,13 +749,18 @@ namespace Language_en {
   LSTR MSG_USB_DISK                       = _UxGT("USB Disk");
 
   LSTR MSG_WIFI_CONNECTED                 = _UxGT("Connected");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("Connect WIFI");
   LSTR MSG_WIFI_MODE                      = _UxGT("Mode");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("AP mode");
   LSTR MSG_WIFI_NETWORK                   = _UxGT("Network");
   LSTR MSG_WIFI_ADDRESS                   = _UxGT("IP Address");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("connection in progress");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Search the WIFI...");
   
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("High temperature printing");
 
   // These strings can be the same in all languages
-  LSTR MSG_MARLIN                         = _UxGT("MarlinRB");
+  LSTR MSG_MARLIN                         = _UxGT("Kywoo3D");
   LSTR MSG_SHORT_DAY                      = _UxGT("d"); // One character only
   LSTR MSG_SHORT_HOUR                     = _UxGT("h"); // One character only
   LSTR MSG_SHORT_MINUTE                   = _UxGT("m"); // One character only

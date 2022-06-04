@@ -63,6 +63,7 @@ extern const uint8_t left_32x32x4[];
 extern const uint8_t right_32x32x4[];
 extern const uint8_t refresh_32x32x4[];
 extern const uint8_t leveling_32x32x4[];
+extern const uint8_t leveling1_32x32x4[];
 
 extern const uint8_t slider_8x16x4[];
 
@@ -95,6 +96,7 @@ enum MarlinImage : uint8_t {
   imgRight,
   imgRefresh,
   imgLeveling,
+  imgLeveling1,
   imgSlider,
   imgHome,
   imgBtn52Rounded,
@@ -173,6 +175,7 @@ extern const tImage Left_32x32x4;
 extern const tImage Right_32x32x4;
 extern const tImage Refresh_32x32x4;
 extern const tImage Leveling_32x32x4;
+extern const tImage Leveling1_32x32x4;
 
 extern const tImage Slider8x16x4;
 

@@ -592,4 +592,16 @@ namespace Language_es {
   LSTR MSG_HEATER_TIMEOUT                 = _UxGT("T. de esp. Calent.");
   LSTR MSG_REHEAT                         = _UxGT("Recalentar");
   LSTR MSG_REHEATING                      = _UxGT("Recalentando...");
+
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECTED                 = _UxGT("La conexión completa");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("La conexión");
+  LSTR MSG_WIFI_MODE                      = _UxGT("El modelo");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("El modo AP");
+  LSTR MSG_WIFI_NETWORK                   = _UxGT("La red");
+  LSTR MSG_WIFI_ADDRESS                   = _UxGT("Dirección IP");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("Conectado en progreso");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Buscar por WIFI...");
+  
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Impresión alta temperatura");
 }

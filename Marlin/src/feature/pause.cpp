@@ -551,6 +551,8 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       // Wait for the heaters to reach the target temperatures
       ensure_safe_temperature(false);
 
+      BUZZ(900, 500);  
+
       // Show the prompt to continue
       show_continue_prompt(is_reload);
 

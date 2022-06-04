@@ -7,7 +7,7 @@
 #ifdef MKS_WIFI
 
 
-#define DMA_TIMEOUT 0x1ffffff
+#define DMA_TIMEOUT 0x3fffff
 #define ESP_PACKET_SIZE     1024
 
 #ifdef STM32F1

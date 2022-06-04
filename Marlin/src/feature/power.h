@@ -54,3 +54,4 @@ class Power {
 };
 
 extern Power powerManager;
+extern uint32_t power_timeout;

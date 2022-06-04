@@ -144,7 +144,8 @@
   #define KILL_PIN                          PA2
   #define KILL_PIN_STATE                    HIGH
 #endif
-
+#define FIL_RUNOUT_PIN                    PA4
+//#define FIL_RUNOUT2_PIN                   PE6
 //
 // Misc. Functions
 //
@@ -164,9 +165,12 @@
     #define WIFI_IO1_PIN                      PC7
     #define WIFI_RESET_PIN                    PA5
   #endif
-  #define FIL_RUNOUT_PIN                    PA4
-  #define FIL_RUNOUT2_PIN                   PE6
+  
 #endif
+
+  #define WIFI_IO0_PIN                      PC13
+  #define WIFI_IO1_PIN                      PC7
+  #define WIFI_RESET_PIN                    PA5
 
 //
 // SD Card
@@ -240,7 +244,7 @@
  #define MKS_WIFI_UART                      USART1
   #undef PLATFORM_M997_SUPPORT
 
- #define MKS_WIFI_IO0                       PA8
+ #define MKS_WIFI_IO0                       PC13
  #define MKS_WIFI_IO4                       PC7
  #define MKS_WIFI_IO_RST                    PA5
 #endif

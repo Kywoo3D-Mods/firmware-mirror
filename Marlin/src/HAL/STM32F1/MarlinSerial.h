@@ -40,7 +40,7 @@ struct MarlinSerial : public HardwareSerial {
       MarlinSerial::begin(baud, SERIAL_8N1);
     }
 
-    void begin(uint32 baud, uint8_t config) {
+    void 0begin(uint32 baud, uint8_t config) {
       HardwareSerial::begin(baud, config);
       nvic_irq_set_priority(c_dev()->irq_num, UART_IRQ_PRIO);
     }

@@ -27,11 +27,11 @@ typedef struct
 #define ESP_PROTOC_HEAD				(uint8_t)0xa5
 #define ESP_PROTOC_TAIL				(uint8_t)0xfc
 
-#define ESP_TYPE_NET				(uint8_t)0x0
-#define ESP_TYPE_GCODE				(uint8_t)0x1
-#define ESP_TYPE_FILE_FIRST			(uint8_t)0x2
-#define ESP_TYPE_FILE_FRAGMENT		(uint8_t)0x3
-#define ESP_TYPE_WIFI_LIST		    (uint8_t)0x4
+#define ESP_TYPE_NET				(uint8_t)0x00
+#define ESP_TYPE_GCODE				(uint8_t)0x01
+#define ESP_TYPE_FILE_FIRST			(uint8_t)0x02
+#define ESP_TYPE_FILE_FRAGMENT		(uint8_t)0x03
+#define ESP_TYPE_WIFI_LIST		    (uint8_t)0x04
 
 #define ESP_PACKET_DATA_MAX_SIZE	1024
 #define ESP_SERIAL_OUT_MAX_SIZE		1024
@@ -50,7 +50,12 @@ typedef struct {
 } MKS_WIFI_INFO;
 
 extern MKS_WIFI_INFO mks_wifi_info;
-
+extern char ip_addr[17];
+extern char mksWifiNameList[21][32];
+extern uint8_t wifiListPage;
+extern uint8_t mks_wifi_keyValue[3];
+extern char mks_wifi_password[70];
+extern uint8_t mks_wifi_wordList[4][27];
 
 void mks_wifi_init(void);
 
@@ -65,6 +70,25 @@ uint8_t mks_wifi_check_packet(uint8_t *in_data);
 uint8_t check_char_allowed(char data);
 
 void mks_wifi_send(uint8_t *packet, uint16_t size);
+
+void mks_wifi_list(ESP_PROTOC_FRAME *packet);
+void mks_wifi_list_display(void);
+void mks_wifi_password_page_0(void);
+void mks_wifi_password_page_1(void);
+void mks_wifi_password_page_2(void);
+void mks_wifi_password_page_3(void);
+void mks_wifi_keyboard_touch(void);
+void mks_wifi_keyboard(void);
+void mks_wifi_del(void);
+void mks_wifi_password_ok(void);
+//void menu_info_wifi(void);
+
+void mks_wifi_ap_mode(void);
+void mks_wifi_scan(void);
+
+
+
+void menu_info_wifi(void);
 
 #endif
 #endif

@@ -31,11 +31,30 @@
 #include "menu_item.h"
 #include "../../MarlinCore.h"
 #include "../../module/settings.h"
+#include "../tft/ui_common.h"
 
 static void set_lcd_language(const uint8_t inlang) {
+  switch (inlang)
+  {
+  case 6:
+    tft.set_font(Tahoma14);
+    tft.add_glyphs(Helvetica14_symbols);
+    break;
+
+  case 7:
+    tft.set_font(yahei_18_zh_cn);
+    tft.add_glyphs(Helvetica18_symbols);
+    break;  
+  
+  default:
+    tft.set_font(Helvetica14);
+    tft.add_glyphs(Helvetica14_symbols);
+    break;
+  }
   ui.set_language(inlang);
   TERN_(LCD_LANGUAGE_AUTO_SAVE, (void)settings.save());
-}
+  (void)settings.save();
+};
 
 void menu_language() {
   START_MENU();
@@ -49,6 +68,15 @@ void menu_language() {
       MENU_ITEM_P(function, GET_LANG(LCD_LANGUAGE_4)::LANGUAGE, []{ set_lcd_language(3); });
       #if NUM_LANGUAGES > 4
         MENU_ITEM_P(function, GET_LANG(LCD_LANGUAGE_5)::LANGUAGE, []{ set_lcd_language(4); });
+        #if NUM_LANGUAGES > 5
+          MENU_ITEM_P(function, GET_LANG(LCD_LANGUAGE_6)::LANGUAGE, []{ set_lcd_language(5); });
+          #if NUM_LANGUAGES > 6
+            MENU_ITEM_P(function, GET_LANG(LCD_LANGUAGE_7)::LANGUAGE, []{ set_lcd_language(6); });
+            #if NUM_LANGUAGES > 7
+              MENU_ITEM_P(function, GET_LANG(LCD_LANGUAGE_8)::LANGUAGE, []{ set_lcd_language(7); });
+            #endif  
+          #endif  
+        #endif  
       #endif
     #endif
   #endif

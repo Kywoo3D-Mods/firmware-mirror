@@ -63,6 +63,12 @@
  */
 void GcodeSuite::M600() {
 
+    BUZZ(1000, 600);
+    BUZZ(300, 0);
+    BUZZ(1000, 600);
+    BUZZ(300, 0);
+    BUZZ(1000, 600);
+    
   #if ENABLED(MIXING_EXTRUDER)
     const int8_t target_e_stepper = get_target_e_stepper_from_command();
     if (target_e_stepper < 0) return;

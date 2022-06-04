@@ -34,7 +34,7 @@ namespace Language_fr {
   using namespace Language_en; // Inherit undefined strings from English
 
   constexpr uint8_t CHARSIZE              = 2;
-  LSTR LANGUAGE                           = _UxGT("Français");
+  LSTR LANGUAGE                           = _UxGT("Frence");
 
   LSTR WELCOME_MSG                        = MACHINE_NAME _UxGT(" prête.");
   LSTR MSG_YES                            = _UxGT("Oui");
@@ -654,4 +654,16 @@ namespace Language_fr {
 
   LSTR MSG_SD_CARD                        = _UxGT("Carte SD");
   LSTR MSG_USB_DISK                       = _UxGT("Clé USB");
+
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECTED                 = _UxGT("La connexion");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("Connexion WIFI");
+  LSTR MSG_WIFI_MODE                      = _UxGT("Le modèle");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("Le mode AP");
+  LSTR MSG_WIFI_NETWORK                   = _UxGT("Le réseau");
+  LSTR MSG_WIFI_ADDRESS                   = _UxGT("Votre adresse IP");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("Connecté en cours");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Rechercher un WIFI...");
+  
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Impression haute température");
 }

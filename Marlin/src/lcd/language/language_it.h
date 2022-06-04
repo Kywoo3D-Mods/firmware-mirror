@@ -730,4 +730,16 @@ namespace Language_it {
 
   LSTR MSG_SD_CARD                        = _UxGT("Scheda SD");
   LSTR MSG_USB_DISK                       = _UxGT("Disco USB");
+
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECTED                 = _UxGT("Collegamenti completi");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("connessione");
+  LSTR MSG_WIFI_MODE                      = _UxGT("modello");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("Modalità di AP");
+  LSTR MSG_WIFI_NETWORK                   = _UxGT("rete");
+  LSTR MSG_WIFI_ADDRESS                   = _UxGT("Indirizzo IP");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("Tra i collegamenti.");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Ricerca WIFI...");
+  
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Stampa ad alta temperatura");
 }

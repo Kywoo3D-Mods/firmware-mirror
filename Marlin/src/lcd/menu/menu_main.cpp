@@ -72,6 +72,7 @@ void menu_motion();
 void menu_temperature();
 void menu_configuration();
 
+
 #if HAS_POWER_MONITOR
   void menu_power_monitor();
 #endif
@@ -82,6 +83,10 @@ void menu_configuration();
 
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   void menu_change_filament();
+#endif
+
+#ifdef MKS_WIFI   // WiFi info
+  void menu_info_wifi(void);
 #endif
 
 #if ENABLED(LCD_INFO_MENU)
@@ -229,41 +234,6 @@ void menu_main() {
   START_MENU();
   // BACK_ITEM(MSG_INFO_SCREEN);
 
-  #if ENABLED(SDSUPPORT)
-
-    #if !defined(MEDIA_MENU_AT_TOP) && !HAS_ENCODER_WHEEL
-      #define MEDIA_MENU_AT_TOP
-    #endif
-
-    #if !ENABLED(RS_STYLE_COLOR_UI)
-      #if ENABLED(SDSUPPORT)
-        const bool card_open = card_detected && card.isFileOpen(), card_detected = card.isMounted();
-      #endif
-      auto sdcard_menu_items = [&]{
-        #if ENABLED(MENU_ADDAUTOSTART)
-          ACTION_ITEM(MSG_RUN_AUTO_FILES, card.autofile_begin); // Run Auto Files
-        #endif
-
-        if (card_detected) {
-          if (!card_open) {
-            #if PIN_EXISTS(SD_DETECT)
-              GCODES_ITEM(MSG_CHANGE_MEDIA, PSTR("M21"));       // M21 Change Media
-            #else                                               // - or -
-              GCODES_ITEM(MSG_RELEASE_MEDIA, PSTR("M22"));      // M22 Release Media
-            #endif
-            SUBMENU(MSG_MEDIA_MENU, MEDIA_MENU_GATEWAY);        // Media Menu (or Password First)
-          }
-        }
-        else {
-          #if PIN_EXISTS(SD_DETECT)
-            ACTION_ITEM(MSG_NO_MEDIA, nullptr);                 // "No Media"
-          #else
-            GCODES_ITEM(MSG_ATTACH_MEDIA, PSTR("M21"));         // M21 Attach Media
-          #endif
-        }
-      };
-    #endif    // !ENABLED(RS_STYLE_COLOR_UI)
-  #endif
 
   if (busy) {
     #if MACHINE_CAN_PAUSE
@@ -284,7 +254,7 @@ void menu_main() {
         ACTION_ITEM(MSG_END_LOOPS, repeat.cancel);
     #endif
 
-    SUBMENU(MSG_TUNE, menu_tune);
+    //SUBMENU(MSG_TUNE, menu_tune);
 
     #if ENABLED(CANCEL_OBJECTS) && DISABLED(SLIM_LCD_MENUS)
       SUBMENU(MSG_CANCEL_OBJECT, []{ editable.int8 = -1; ui.goto_screen(menu_cancelobject); });
@@ -307,7 +277,7 @@ void menu_main() {
       SUBMENU(MSG_PREHEAT_CUSTOM, menu_preheat_only);
     #endif
 
-    SUBMENU(MSG_MOTION, menu_motion);
+    //SUBMENU(MSG_MOTION, menu_motion);
   }
 
   SUBMENU(MSG_CONFIGURATION, menu_configuration);
@@ -357,26 +327,12 @@ void menu_main() {
     SUBMENU(MSG_INFO_MENU, menu_info);
   #endif
 
+ #ifdef MKS_WIFI   // WiFi info
+   SUBMENU(MSG_INFO_WIFI_MENU, menu_info_wifi);
+ #endif
+
   #if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
     SUBMENU(MSG_LEDS, menu_led);
-  #endif
-
-  //
-  // Switch power on/off
-  //
-  #if ENABLED(PSU_CONTROL)
-    if (powerManager.psu_on)
-      #if ENABLED(PS_OFF_CONFIRM)
-        CONFIRM_ITEM(MSG_SWITCH_PS_OFF,
-          MSG_YES, MSG_NO,
-          ui.poweroff, ui.goto_previous_screen,
-          GET_TEXT(MSG_SWITCH_PS_OFF), (const char *)nullptr, PSTR("?")
-        );
-      #else
-        GCODES_ITEM(MSG_SWITCH_PS_OFF, PSTR("M81"));
-      #endif
-    else
-      GCODES_ITEM(MSG_SWITCH_PS_ON, PSTR("M80"));
   #endif
 
   #if ENABLED(SDSUPPORT) && DISABLED(MEDIA_MENU_AT_TOP)

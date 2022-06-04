@@ -25,6 +25,7 @@
 
 #include "tft_color.h"
 #include "tft_image.h"
+#include "../../module/settings.h"
 
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
   #include "../tft_io/touch_calibration.h"
@@ -42,6 +43,7 @@
 
 // Menu Navigation
 extern int8_t encoderTopLine, encoderLine, screen_items;
+extern int8_t SaveSettings;
 
 enum TouchControlType : uint16_t {
   NONE = 0x0000,
@@ -68,7 +70,51 @@ enum TouchControlType : uint16_t {
   BUTTON,
   PRINT_PAUSE,
   PRINT_RESUME,
-  PRINT_STOP
+  PRINT_STOP,
+
+  WIFI_AP,
+  WIFI_CONNECT,
+  WIFI_PAGE_UP,
+  WIFI_PAGE_DOWN,
+  WIFI_NAME_0,
+  WIFI_NAME_1,
+  WIFI_NAME_2,
+  WIFI_NAME_3,
+  WIFI_NAME_4,
+  WIFI_PASSWORD_OK,
+  KEYBOARD_0_1,
+  KEYBOARD_1_1,
+  KEYBOARD_1_2,
+  KEYBOARD_1_3,
+  KEYBOARD_1_4,
+  KEYBOARD_1_5,
+  KEYBOARD_2_1,
+  KEYBOARD_2_2,
+  KEYBOARD_2_3,
+  KEYBOARD_2_4,
+  KEYBOARD_2_5,
+  KEYBOARD_2_6,
+  KEYBOARD_2_7,
+  KEYBOARD_3_1,
+  KEYBOARD_3_2,
+  KEYBOARD_3_3,
+  KEYBOARD_3_4,
+  KEYBOARD_3_5,
+  KEYBOARD_3_6,
+  KEYBOARD_3_7,
+  KEYBOARD_4_1,
+  KEYBOARD_4_2,
+  KEYBOARD_4_3,
+  KEYBOARD_4_4,
+  KEYBOARD_4_5,
+  KEYBOARD_4_6,
+  KEYBOARD_4_7,
+  KEYBOARD_5_1,
+  KEYBOARD_5_2,
+  KEYBOARD_5_3,
+  KEYBOARD_5_4,
+  KEYBOARD_5_5,
+  KEYBOARD_5_6
 };
 
 typedef void (*screenFunc_t)();
@@ -86,7 +132,7 @@ typedef struct __attribute__((__packed__)) {
   intptr_t data;
 } touch_control_t;
 
-#define MAX_CONTROLS        16
+#define MAX_CONTROLS        35
 #define MINIMUM_HOLD_TIME   15
 #define TOUCH_REPEAT_DELAY  75
 #define MIN_REPEAT_DELAY    25
@@ -120,6 +166,8 @@ class Touch {
     static void idle();
     static bool is_clicked() {
       if (touch_control_type == CLICK) {
+        (void)settings.save();
+        (void)settings.save();
         touch_control_type = NONE;
         return true;
       }

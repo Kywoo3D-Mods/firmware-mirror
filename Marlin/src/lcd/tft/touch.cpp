@@ -37,6 +37,7 @@
 #endif
 
 #include "tft.h"
+#include "../../lcd/menu/menu_item.h"
 
 bool Touch::enabled = true;
 int16_t Touch::x, Touch::y;
@@ -54,6 +55,8 @@ TouchControlType Touch::touch_control_type = NONE;
 #if HAS_RESUME_CONTINUE
   extern bool wait_for_user;
 #endif
+
+int8_t SaveSettings = 0;
 
 void Touch::init() {
   TERN_(TOUCH_SCREEN_CALIBRATION, touch_calibration.calibration_reset());
@@ -157,12 +160,15 @@ void Touch::touch(touch_control_t *control) {
     #endif // TOUCH_SCREEN_CALIBRATION
 
     case MENU_SCREEN: ui.goto_screen((screenFunc_t)control->data); break;
-    case BACK: ui.goto_previous_screen(); break;
+    case BACK: ui.goto_previous_screen(); 
+      if (1 == SaveSettings) {MarlinSettings::save(); MarlinSettings::save();}
+      SaveSettings = 0;
+      break;
     case MENU_CLICK:
       TERN_(SINGLE_TOUCH_NAVIGATION, ui.encoderPosition = control->data);
       ui.lcd_clicked = true;
       break;
-    case CLICK: ui.lcd_clicked = true; break;
+    case CLICK: ui.lcd_clicked = true; SaveSettings = 1; break;
     #if HAS_RESUME_CONTINUE
       case RESUME_CONTINUE: extern bool wait_for_user; wait_for_user = false; break;
     #endif
@@ -258,6 +264,59 @@ void Touch::touch(touch_control_t *control) {
 
     // TODO: TOUCH could receive data to pass to the callback
     case BUTTON: ((screenFunc_t)control->data)(); break;
+
+    case WIFI_AP:  mks_wifi_ap_mode();	ui.goto_previous_screen();	delay(800);  break;
+
+	  case WIFI_CONNECT:	mks_wifi_scan();  break;
+
+    case WIFI_PAGE_UP:  if(wifiListPage > 0) wifiListPage--;  mks_wifi_list_display();  break;
+
+    case WIFI_PAGE_DOWN:  if(wifiListPage < 3) wifiListPage++;  mks_wifi_list_display();  break;
+
+    case WIFI_NAME_0:	ui.clear_lcd();		mks_wifi_password_page_0(); 	wifiListPage = wifiListPage * 5 + 0;  break;
+
+    case WIFI_NAME_1:	ui.clear_lcd();		mks_wifi_password_page_0();	  wifiListPage = wifiListPage * 5 + 1;  break;
+
+    case WIFI_NAME_2:	ui.clear_lcd();		mks_wifi_password_page_0();	  wifiListPage = wifiListPage * 5 + 2;  break;
+
+    case WIFI_NAME_3:	ui.clear_lcd();		mks_wifi_password_page_0();	  wifiListPage = wifiListPage * 5 + 3;  break;
+
+    case WIFI_NAME_4:	ui.clear_lcd();		mks_wifi_password_page_0();	  wifiListPage = wifiListPage * 5 + 4;  break;
+
+    case KEYBOARD_1_1:	mks_wifi_password_page_0();	  mks_wifi_keyValue[0] = 0;	 break;
+    case KEYBOARD_1_2:	mks_wifi_password_page_1();	  mks_wifi_keyValue[0] = 1;  break;
+    case KEYBOARD_1_3:	mks_wifi_password_page_2();	  mks_wifi_keyValue[0] = 2;  break;
+    case KEYBOARD_1_4:	mks_wifi_password_page_3();	  mks_wifi_keyValue[0] = 3;  break;
+	  case KEYBOARD_1_5:	mks_wifi_del();  break;
+    case WIFI_PASSWORD_OK:  mks_wifi_password_ok();  ui.goto_previous_screen();  delay(800);  break;
+
+	  case KEYBOARD_2_1:	mks_wifi_keyValue[1] = 0;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_2:	mks_wifi_keyValue[1] = 1;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_3:	mks_wifi_keyValue[1] = 2;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_4:	mks_wifi_keyValue[1] = 3;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_5:	mks_wifi_keyValue[1] = 4;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_6:	mks_wifi_keyValue[1] = 5;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_2_7:	mks_wifi_keyValue[1] = 6;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_1:	mks_wifi_keyValue[1] = 7;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_2:	mks_wifi_keyValue[1] = 8;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_3:	mks_wifi_keyValue[1] = 9;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_4:	mks_wifi_keyValue[1] = 10;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_5:	mks_wifi_keyValue[1] = 11;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_3_6:	mks_wifi_keyValue[1] = 12;  mks_wifi_keyboard(); 	break;
+  	case KEYBOARD_3_7:	mks_wifi_keyValue[1] = 13;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_1:	mks_wifi_keyValue[1] = 14;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_2:	mks_wifi_keyValue[1] = 15;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_3:	mks_wifi_keyValue[1] = 16;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_4:	mks_wifi_keyValue[1] = 17;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_5:	mks_wifi_keyValue[1] = 18;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_6:	mks_wifi_keyValue[1] = 19;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_4_7:	mks_wifi_keyValue[1] = 20;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_1:	mks_wifi_keyValue[1] = 21;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_2:	mks_wifi_keyValue[1] = 22;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_3:	mks_wifi_keyValue[1] = 23;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_4:	mks_wifi_keyValue[1] = 24;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_5:	mks_wifi_keyValue[1] = 25;  mks_wifi_keyboard(); 	break;
+	  case KEYBOARD_5_6:	mks_wifi_keyValue[1] = 26;  mks_wifi_keyboard(); 	break;
 
     default: break;
   }

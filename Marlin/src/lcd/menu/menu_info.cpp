@@ -32,7 +32,9 @@
 
 #include "../tft/tft_string.h"
 
-#include "..\..\module\mks_wifi\mks_wifi.h"
+#include "../../module/mks_wifi/mks_wifi.h"
+#include "../../lcd/tft/tft.h"
+#include "../../lcd/tft/touch.h"
 
 
 #if HAS_GAMES
@@ -110,7 +112,7 @@ void menu_info_thermistors() {
     #include "../thermistornames.h"
     STATIC_ITEM_P(PSTR(LCD_STR_E0 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_0_MINTEMP), SS_LEFT);
-    PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_0_MAXTEMP), SS_LEFT);
+    PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(temp_nozzle_0_max), SS_LEFT);
     STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
@@ -276,33 +278,6 @@ void menu_info_board() {
     END_SCREEN();
   }
 
-#ifdef MKS_WIFI                                             // WiFi info
-  void menu_info_wifi() {
-      if (ui.use_click()) return ui.go_back();
-      START_SCREEN();
-      if (mks_wifi_info.connected)
-      {
-        PSTRING_ITEM(MSG_WIFI_CONNECTED, GET_TEXT(MSG_YES), SS_CENTER);
-      
-        if (mks_wifi_info.mode == 0x01)
-          PSTRING_ITEM(MSG_WIFI_MODE, "AP", SS_CENTER);
-        else
-          PSTRING_ITEM(MSG_WIFI_MODE, "Client", SS_CENTER);
-        
-        char ip_addr[16];
-         sprintf(ip_addr,"%d.%d.%d.%d", mks_wifi_info.ip[0], mks_wifi_info.ip[1], mks_wifi_info.ip[2], mks_wifi_info.ip[3]);
-        PSTRING_ITEM(MSG_WIFI_ADDRESS, ip_addr, SS_CENTER);
-        PSTRING_ITEM(MSG_WIFI_NETWORK, mks_wifi_info.net_name, SS_CENTER);
-      }
-      else
-      {
-        PSTRING_ITEM(MSG_WIFI_CONNECTED, GET_TEXT(MSG_NO), SS_CENTER);
-      }
-
-      END_SCREEN();
-    }
-#endif
-
 #endif
 
 //
@@ -321,9 +296,6 @@ void menu_info() {
     #endif
   #endif
 
-  #ifdef MKS_WIFI                                             // WiFi info
-    SUBMENU(MSG_INFO_WIFI_MENU, menu_info_wifi);           // Printer Info >
-  #endif
   #if ENABLED(PRINTCOUNTER)
     SUBMENU(MSG_INFO_STATS_MENU, menu_info_stats);               // Printer Stats >
   #endif

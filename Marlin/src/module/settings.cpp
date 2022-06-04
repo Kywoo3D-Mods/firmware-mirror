@@ -505,6 +505,8 @@ typedef struct SettingsDataStruct {
     uint8_t ui_language;                                // M414 S
   #endif
 
+  bool temp_nozzle_max_key;
+
 } SettingsData;
 
 //static_assert(sizeof(SettingsData) <= MARLIN_EEPROM_SIZE, "EEPROM too small to contain SettingsData!");
@@ -1446,6 +1448,8 @@ void MarlinSettings::postprocess() {
       EEPROM_WRITE(ui.language);
     #endif
 
+    EEPROM_WRITE(temp_nozzle_max_key);
+
     //
     // Report final CRC and Data Size
     //
@@ -2353,6 +2357,8 @@ void MarlinSettings::postprocess() {
         ui.set_language(ui_language);
       }
       #endif
+
+      EEPROM_READ(temp_nozzle_max_key);
 
       //
       // Validate Final Size and CRC
@@ -3304,19 +3310,6 @@ void MarlinSettings::reset() {
 
     TERN_(HAS_MULTI_LANGUAGE, gcode.M414_report(forReplay));
 
-    CONFIG_ECHO_HEADING("Touch calibration values");
-    tft_string.set("#define TOUCH_CALIBRATION_X ");
-    tft_string.add(i32tostr6rj(touch_calibration.calibration.x));
-    SERIAL_ECHOLN((char*)(tft_string.string()));
-    tft_string.set("#define TOUCH_CALIBRATION_Y ");
-    tft_string.add(i32tostr6rj(touch_calibration.calibration.y));
-    SERIAL_ECHOLN((char*)(tft_string.string()));
-    tft_string.set("#define TOUCH_OFFSET_X      ");
-    tft_string.add(i32tostr6rj(touch_calibration.calibration.offset_x));
-    SERIAL_ECHOLN((char*)(tft_string.string()));
-    tft_string.set("#define TOUCH_OFFSET_Y      ");
-    tft_string.add(i32tostr6rj(touch_calibration.calibration.offset_y));
-    SERIAL_ECHOLN((char*)(tft_string.string()));
   }
 
 #endif // !DISABLE_M503

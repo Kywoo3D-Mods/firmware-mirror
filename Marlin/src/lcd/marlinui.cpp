@@ -62,6 +62,9 @@ MarlinUI ui;
   #include "../module/printcounter.h"
 #endif
 
+#include "../lcd/tft/tft_string.h"
+#include "../lcd/tft/tft.h"
+
 #if LCD_HAS_WAIT_FOR_MOVE
   bool MarlinUI::wait_for_move; // = false
 #endif
@@ -665,6 +668,25 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
 
   void MarlinUI::kill_screen(PGM_P lcd_error, PGM_P lcd_component) {
     init();
+
+    switch (MarlinUI::language)
+	{
+	case 6:
+		tft.set_font(Tahoma14);
+		tft.add_glyphs(Helvetica14_symbols);
+		break;
+
+	case 7:
+		tft.set_font(yahei_18_zh_cn);
+		tft.add_glyphs(Helvetica18_symbols);
+		break;
+
+	default:
+		tft.set_font(Helvetica14);
+		tft.add_glyphs(Helvetica14_symbols);
+		break;
+	}
+  
     status_printf_P(1, PSTR(S_FMT ": " S_FMT), lcd_error, lcd_component);
     TERN_(HAS_LCD_MENU, return_to_status());
 
@@ -1681,6 +1703,7 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
           clear_menu_history();
           quick_feedback();
           goto_screen(MEDIA_MENU_GATEWAY);
+          LCD_MESSAGEPGM(MSG_MEDIA_INSERTED);
         #else
           LCD_MESSAGEPGM(MSG_MEDIA_INSERTED);
         #endif
@@ -1785,6 +1808,7 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
     }
     void MarlinUI::store_settings() {
       const bool good = settings.save();
+      settings.save();
       completion_feedback(good);
     }
   #endif

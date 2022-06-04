@@ -34,7 +34,7 @@ namespace Language_ru {
   using namespace Language_en; // Inherit undefined strings from English
 
   constexpr uint8_t    CHARSIZE                            = 2;
-  PROGMEM Language_Str LANGUAGE                            = _UxGT("Русский");
+  PROGMEM Language_Str LANGUAGE                            = _UxGT("Russian");
 
   PROGMEM Language_Str WELCOME_MSG                         = MACHINE_NAME _UxGT(" Готов.");
   PROGMEM Language_Str MSG_YES                             = _UxGT("Да");
@@ -913,6 +913,13 @@ namespace Language_ru {
   LSTR MSG_WIFI_MODE                      = _UxGT("Режим");
   LSTR MSG_WIFI_NETWORK                   = _UxGT("Сеть:");
   LSTR MSG_WIFI_ADDRESS                   = _UxGT("IP адрес");
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("связ");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("Режим AP");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("Связь.");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Поиск wi-fi...");
+  
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Высокотемпературная печать");
   
 }
 

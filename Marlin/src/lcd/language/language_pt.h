@@ -37,7 +37,7 @@ namespace Language_pt {
   constexpr uint8_t CHARSIZE              = 2;
   LSTR LANGUAGE                           = _UxGT("Portuguese");
 
-  LSTR WELCOME_MSG                        = MACHINE_NAME _UxGT(" pronta.");
+  LSTR WELCOME_MSG                        = MACHINE_NAME _UxGT(" Pronta.");
   LSTR MSG_MEDIA_INSERTED                 = _UxGT("Cartão inserido");
   LSTR MSG_MEDIA_REMOVED                  = _UxGT("Cartão removido");
   LSTR MSG_MAIN                           = _UxGT("Menu principal");
@@ -119,7 +119,7 @@ namespace Language_pt {
   LSTR MSG_CONTRAST                       = _UxGT("Contraste");
   LSTR MSG_STORE_EEPROM                   = _UxGT("Guardar na memoria");
   LSTR MSG_LOAD_EEPROM                    = _UxGT("Carregar da memoria");
-  LSTR MSG_RESTORE_DEFAULTS               = _UxGT("Rest. de emergen.");
+  LSTR MSG_RESTORE_DEFAULTS               = _UxGT("Config. de Fabrica.");
   LSTR MSG_REFRESH                        = LCD_STR_REFRESH _UxGT(" Recarregar");
   LSTR MSG_INFO_SCREEN                    = _UxGT("Monitorizar");
   LSTR MSG_PREPARE                        = _UxGT("Preparar");
@@ -171,4 +171,38 @@ namespace Language_pt {
   LSTR MSG_BOTTOM_RIGHT                   = _UxGT("Inferior Direto");
   LSTR MSG_CALIBRATION_COMPLETED          = _UxGT("Calibração Completa");
   LSTR MSG_CALIBRATION_FAILED             = _UxGT("Calibração Falhou");
+
+  LSTR MSG_FILAMENT_CHANGE_HEADER_PAUSE   = _UxGT("Impressao Pausada");
+  LSTR MSG_FILAMENT_CHANGE_HEATING        = _UxGT(MSG_2_LINE("Bico Aquecendo", "Aguarde ..."));
+  LSTR MSG_FILAMENT_CHANGE_NOZZLE         = _UxGT("  Bico: ");
+  LSTR MSG_FILAMENT_CHANGE_PURGE          = _UxGT(MSG_2_LINE("Aguarde", "Expurgo do filamento"));
+  LSTR MSG_FILAMENT_CHANGE_OPTION_PURGE   = _UxGT("Expurgar Mais");
+  LSTR MSG_BACK                           = _UxGT("Retornar");
+  LSTR MSG_FILAMENT_CHANGE_INSERT         = _UxGT(MSG_3_LINE("Insira o Filamento e", "precione para", "continuar"));
+  LSTR MSG_PREHEAT_CUSTOM                 = _UxGT("Pre-aquecer");
+  LSTR MSG_SETTINGS_STORED                = _UxGT("Configurações Salvas");
+  LSTR MSG_LEVEL_BED                      = _UxGT("Auto Nívelamento");
+  LSTR MSG_INFO_PRINTER_MENU              = _UxGT("Inf. Da Impressora");
+  LSTR MSG_INFO_BOARD_MENU                = _UxGT("Inf da Placa");
+  LSTR MSG_ADVANCED_SETTINGS              = _UxGT("Ajustes Avançados");
+  LSTR MSG_RUNOUT_SENSOR                  = _UxGT("Sensor de Filamento");
+  LSTR MSG_OUTAGE_RECOVERY                = _UxGT("Rec.falta de Energia");
+  LSTR MSG_CONFIGURATION                  = _UxGT("Configurações");
+  LSTR MSG_INFO_MENU                      = _UxGT("Informações");
+  LSTR MSG_VELOCITY                       = _UxGT("Velocidade");
+  LSTR MSG_ACCELERATION                   = _UxGT("Aceleração");
+
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECTED                 = _UxGT("Conectado");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("Conectado");
+  LSTR MSG_WIFI_MODE                      = _UxGT("Mode");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("AP mode");
+  LSTR MSG_WIFI_NETWORK                   = _UxGT("Rede");
+  LSTR MSG_WIFI_ADDRESS                   = _UxGT("Endereço IP");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("conexão em andamento");
+  LSTR MSG_YES                            = _UxGT("Sim");
+  LSTR MSG_NO                             = _UxGT("Não");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Pesquise o WIFI...");
+
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Impressão de alta temperatura");
 }

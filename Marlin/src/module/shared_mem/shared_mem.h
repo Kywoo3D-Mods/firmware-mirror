@@ -7,7 +7,7 @@
 
 #ifdef STM32F1
 #define SHARED_MEM_1KB_COUNT    8
-#define SHARED_MEM_SIZE         SHARED_MEM_1KB_COUNT*1024
+#define SHARED_MEM_SIZE         SHARED_MEM_1KB_COUNT*10
 #endif
 
 #ifdef STM32F4

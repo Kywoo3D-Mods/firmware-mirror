@@ -640,4 +640,16 @@ namespace Language_de {
   #endif
   LSTR MSG_REHEAT                         = _UxGT("Erneut aufheizen");
   LSTR MSG_REHEATING                      = _UxGT("Erneut aufhei. ...");
+
+  LSTR MSG_INFO_WIFI_MENU                 = _UxGT("WiFi");
+  LSTR MSG_WIFI_CONNECTED                 = _UxGT("Verbindung hergestellt.");
+  LSTR MSG_WIFI_CONNECT                   = _UxGT("Stecker ist drin");
+  LSTR MSG_WIFI_MODE                      = _UxGT("Strukturiert.");
+  LSTR MSG_WIFI_AP_MODE                   = _UxGT("AP Strukturiert.");
+  LSTR MSG_WIFI_NETWORK                   = _UxGT("Das netz.");
+  LSTR MSG_WIFI_ADDRESS                   = _UxGT("Die ip-adresse.");
+  LSTR MSG_WIFI_IN_CONNECTED              = _UxGT("Verbindung hergestellt.");
+  LSTR MSG_WIFI_SEARCH                    = _UxGT("Suche nach WIFI...");
+  
+  LSTR MSG_TEMP_NOZZLE_MAX                = _UxGT("Hitzedruck.");
 }

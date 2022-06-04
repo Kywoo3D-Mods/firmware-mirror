@@ -53,7 +53,7 @@ const tImage Fan_Fast1_64x64x4      = { (void *)fan_fast1_64x64x4, 64, 64, GREYS
 const tImage SD_64x64x4             = { (void *)sd_64x64x4, 64, 64, GREYSCALE4 };
 const tImage Home_64x64x4           = { (void *)home_64x64x4, 64, 64, GREYSCALE4 };
 const tImage BtnRounded_64x52x4     = { (void *)btn_rounded_64x52x4, 64, 52, GREYSCALE4 };
-const tImage BtnRounded_42x39x4     = { (void *)btn_rounded_42x39x4, 42, 39, GREYSCALE4 };
+const tImage BtnRounded_42x39x4     = { (void *)btn_rounded_42x39x4, 64, 52, GREYSCALE4 };
 const tImage Menu_64x64x4           = { (void *)menu_64x64x4, 64, 64, GREYSCALE4 };
 const tImage Settings_64x64x4       = { (void *)settings_64x64x4, 64, 64, GREYSCALE4 };
 const tImage Confirm_64x64x4        = { (void *)confirm_64x64x4, 64, 64, GREYSCALE4 };
@@ -67,13 +67,14 @@ const tImage Resume_64x64x4         = { (void *)resume_64x64x4, 64, 64, GREYSCAL
 const tImage Feedrate_32x32x4       = { (void *)feedrate_32x32x4, 32, 32, GREYSCALE4 };
 const tImage Flowrate_32x32x4       = { (void *)flowrate_32x32x4, 32, 32, GREYSCALE4 };
 const tImage Directory_32x32x4      = { (void *)directory_32x32x4, 32, 32, GREYSCALE4 };
-const tImage Back_32x32x4           = { (void *)back_32x32x4, 32, 32, GREYSCALE4 };
-const tImage Up_32x32x4             = { (void *)up_32x32x4, 32, 32, GREYSCALE4 };
-const tImage Down_32x32x4           = { (void *)down_32x32x4, 32, 32, GREYSCALE4 };
+const tImage Back_32x32x4           = { (void *)back_32x32x4, 64, 64, GREYSCALE4 };
+const tImage Up_32x32x4             = { (void *)up_32x32x4, 64, 64, GREYSCALE4 };
+const tImage Down_32x32x4           = { (void *)down_32x32x4, 64, 64, GREYSCALE4 };
 const tImage Left_32x32x4           = { (void *)left_32x32x4, 32, 32, GREYSCALE4 };
 const tImage Right_32x32x4          = { (void *)right_32x32x4, 32, 32, GREYSCALE4 };
 const tImage Refresh_32x32x4        = { (void *)refresh_32x32x4, 32, 32, GREYSCALE4 };
-const tImage Leveling_32x32x4       = { (void *)leveling_32x32x4, 32, 32, GREYSCALE4 };
+const tImage Leveling_32x32x4       = { (void *)leveling_32x32x4, 64, 52, GREYSCALE4 };
+const tImage Leveling1_32x32x4       = { (void *)leveling1_32x32x4, 64, 52, GREYSCALE4 };
 
 const tImage Slider8x16x4           = { (void *)slider_8x16x4, 8, 16, GREYSCALE4 };
 
@@ -106,6 +107,7 @@ const tImage Images[imgCount] = {
   Right_32x32x4,
   Refresh_32x32x4,
   Leveling_32x32x4,
+  Leveling1_32x32x4,
   Slider8x16x4,
   Home_64x64x4,
   BtnRounded_64x52x4,

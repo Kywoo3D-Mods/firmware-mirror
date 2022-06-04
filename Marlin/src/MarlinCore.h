@@ -53,6 +53,8 @@ enum MarlinState : uint8_t {
 };
 
 extern MarlinState marlin_state;
+extern uint32_t auto_shutdown;
+extern uint16_t temp_nozzle_0_max;
 inline bool IsRunning() { return marlin_state >= MF_RUNNING; }
 inline bool IsStopped() { return marlin_state == MF_STOPPED; }
 

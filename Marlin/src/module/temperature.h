@@ -350,7 +350,7 @@ class Temperature {
 
     #if HAS_HOTEND
       static hotend_info_t temp_hotend[HOTENDS];
-      static const celsius_t hotend_maxtemp[HOTENDS];
+      static celsius_t hotend_maxtemp[HOTENDS];
       static inline celsius_t hotend_max_target(const uint8_t e) { return hotend_maxtemp[e] - (HOTEND_OVERSHOOT); }
     #endif
     #if HAS_HEATED_BED
@@ -1006,3 +1006,4 @@ class Temperature {
 };
 
 extern Temperature thermalManager;
+extern bool temp_nozzle_max_key;

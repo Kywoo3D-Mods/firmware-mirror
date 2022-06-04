@@ -75,7 +75,7 @@
   #define COLOR_BACKGROUND    0x0000  // #000000
 #endif
 #ifndef COLOR_SELECTION_BG
-  #define COLOR_SELECTION_BG  0x9930  // #992380
+  #define COLOR_SELECTION_BG  0x0000  // #992380
 #endif
 #ifndef COLOR_WEBSITE_URL
   #define COLOR_WEBSITE_URL   0x03B7  // #0075BD
@@ -89,13 +89,13 @@
     #define COLOR_INACTIVE          COLOR_GREY
   #endif
   #ifndef COLOR_COLD
-    #define COLOR_COLD              RGB(201, 201, 201)
+    #define COLOR_COLD              RGB(255,140,0)
   #endif
   #ifndef COLOR_HOTEND
     #define COLOR_HOTEND            RGB(225, 225, 32)
   #endif
   #ifndef COLOR_TARGET_HOTEND
-    #define COLOR_TARGET_HOTEND     RGB(232, 64, 0)
+    #define COLOR_TARGET_HOTEND     RGB(255,140,0)
   #endif
   #ifndef COLOR_HEATED_BED
     #define COLOR_HEATED_BED        RGB(225, 225, 32)
@@ -110,7 +110,7 @@
     #define COLOR_COOLER            COLOR_DARK_ORANGE
   #endif
   #ifndef COLOR_FAN
-    #define COLOR_FAN               RGB(201, 201, 201)
+    #define COLOR_FAN               RGB(210,105,30)
   #endif
   #ifndef COLOR_FAN_ACTIVE
     #define COLOR_FAN_ACTIVE        RGB(0, 128, 255)
@@ -158,7 +158,7 @@
   #endif
 
   #ifndef COLOR_CONTROL_ENABLED
-    #define COLOR_CONTROL_ENABLED   RGB(255, 255, 132)
+    #define COLOR_CONTROL_ENABLED   RGB(255,140,0)
   #endif
   #ifndef COLOR_CONTROL_DISABLED
     #define COLOR_CONTROL_DISABLED  COLOR_GREY

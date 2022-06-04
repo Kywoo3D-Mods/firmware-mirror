@@ -35,7 +35,7 @@
 #define MENU_ITEM_ICON_Y       5
 #define MENU_ITEM_ICON_SPACE  42
 
-#define MENU_FONT_NAME      Helvetica18
+#define MENU_FONT_NAME      Tahoma18
 #define SYMBOLS_FONT_NAME   Helvetica18_symbols
 #define MENU_ITEM_HEIGHT    43
 #define FONT_LINE_HEIGHT    34

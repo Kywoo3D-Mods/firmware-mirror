@@ -25,8 +25,8 @@
   extern "C" { /* C-declarations for C++ */
 #endif
 
-#define ESP_FIRMWARE_FILE         "kywoowifi.bin"
-#define ESP_FIRMWARE_FILE_RENAME  "kywoowifi.CUR"
+#define ESP_FIRMWARE_FILE         "MksWifi.bin"
+#define ESP_FIRMWARE_FILE_RENAME  "MKSWIFI.CUR"
 #define ESP_WEB_FIRMWARE_FILE     "1:/MksWifi_Web.bin"
 #define ESP_WEB_FILE              "1:/MksWifi_WebView.bin"
 

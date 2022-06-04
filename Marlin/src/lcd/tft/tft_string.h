@@ -28,8 +28,9 @@ extern const uint8_t font10x20[];
 
 extern const uint8_t Helvetica12Bold[];
 
-extern const uint8_t Helvetica14[], Helvetica14_symbols[];
-extern const uint8_t Helvetica18[], Helvetica18_symbols[];
+extern const uint8_t Helvetica14[], Helvetica14ru[], Tahoma14[], Helvetica14_symbols[];
+extern const uint8_t Helvetica18[], Helvetica18ru[], Tahoma18[], Helvetica18_symbols[];
+extern const uint8_t Tahoma36bold_num[];
 
 #define NO_GLYPH          0xFF
 
@@ -60,7 +61,7 @@ typedef struct __attribute__((__packed__)) {
    int8_t BBXOffsetY;
 } glyph_t;
 
-#define MAX_STRING_LENGTH   64
+#define MAX_STRING_LENGTH   128
 
 class TFT_String {
   private:

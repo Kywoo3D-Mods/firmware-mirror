@@ -1,4 +1,26 @@
 /**
+ * Marlin 3D Printer Firmware
+ * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ *
+ * Based on Sprinter and grbl.
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
+/**
  * @file    fontutils.cpp
  * @brief   help functions for font and char
  * @author  Yunhui Fu (yhfudev@gmail.com)
@@ -94,8 +116,23 @@ uint8_t* get_utf8_value_cb(uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t
     p++;
   }
   else if (0xC0 == (0xE0 & valcur)) {
-    val = valcur & 0x1F;
-    NEXT_6_BITS();
+    //--- Convert cyrillic UTF8 char to ANSI char
+     if (valcur == 0xD0 || valcur == 0xD1)
+    {
+      val = valcur;
+      p++;
+      val = (val << 8) + cb_read_byte(p);
+      if (val > 0xD08F && val < 0xD0C0)
+        val = val - 0xCFD0;
+      else if (val > 0xD17F && val < 0xD190)
+        val = val - 0xD090;
+    }
+    //--- End of Convert cyrillic UTF8 char to ANSI char
+    else
+    {
+      val = valcur & 0x1F;
+      NEXT_6_BITS();
+    }
     p++;
   }
   #if MAX_UTF8_CHAR_SIZE >= 3
@@ -149,7 +186,7 @@ uint8_t* get_utf8_value_cb(uint8_t *pstart, read_byte_cb_t cb_read_byte, wchar_t
 static inline uint8_t utf8_strlen_cb(const char *pstart, read_byte_cb_t cb_read_byte) {
   uint8_t cnt = 0;
   uint8_t *p = (uint8_t *)pstart;
-  for (;;) {
+  if (p) for (;;) {
     const uint8_t b = cb_read_byte(p);
     if (!b) break;
     if (utf8_is_start_byte_of_char(b)) cnt++;
@@ -164,6 +201,41 @@ uint8_t utf8_strlen(const char *pstart) {
 
 uint8_t utf8_strlen_P(PGM_P pstart) {
   return utf8_strlen_cb(pstart, read_byte_rom);
+}
+
+char *utf8_strncpy(char *dst, const char* src, size_t maxlen) {
+	char *cdst = dst;
+  size_t csize = 0;
+	
+	while (*src != 0)
+	{
+		if (*src < 0x80)
+		{
+			*cdst = *src;
+			cdst++;
+			src++;
+      csize++;
+      if (csize >= maxlen)
+      {
+        cdst--;
+        break;
+      }
+		}
+		else
+		{
+			*(uint16_t*)(cdst) = *(uint16_t*)(src);
+			cdst += 2;
+			src += 2;
+      csize += 2;
+      if (csize >= maxlen)
+      {
+        cdst -= 2;
+        break;
+      }
+		}
+	}
+	*cdst = 0;
+	return dst;
 }
 
 static inline uint8_t utf8_byte_pos_by_char_num_cb(const char *pstart, read_byte_cb_t cb_read_byte, const uint8_t charnum) {

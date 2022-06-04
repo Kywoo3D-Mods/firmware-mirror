@@ -25,7 +25,11 @@
  * Release version. Leave the Marlin version or apply a custom scheme.
  */
 #ifndef SHORT_BUILD_VERSION
-  #define SHORT_BUILD_VERSION "2.0.9"
+  #define SHORT_BUILD_VERSION "2.0.9.2_rb_1.4"
+#endif
+
+#ifndef SHORT_REBORN_VERSION
+  #define SHORT_REBORN_VERSION "1.4"
 #endif
 
 /**
@@ -42,7 +46,7 @@
  * version was tagged.
  */
 #ifndef STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE "2021-06-15"
+  #define STRING_DISTRIBUTION_DATE "--------"
 #endif
 
 /**
@@ -52,7 +56,7 @@
  * to alert users to major changes.
  */
 
-#define MARLIN_HEX_VERSION 02000900
+#define MARLIN_HEX_VERSION 02000902
 #ifndef REQUIRED_CONFIGURATION_H_VERSION
   #define REQUIRED_CONFIGURATION_H_VERSION MARLIN_HEX_VERSION
 #endif
@@ -73,7 +77,7 @@
  * Define a generic printer name to be output to the LCD after booting Marlin.
  */
 #ifndef MACHINE_NAME
-  #define MACHINE_NAME "3D Printer"
+  #define MACHINE_NAME "FlyingBear Reborn"
 #endif
 
 /**
@@ -82,7 +86,7 @@
  * providing the source code to your customers.)
  */
 #ifndef SOURCE_CODE_URL
-  #define SOURCE_CODE_URL "github.com/MarlinFirmware/Marlin"
+  #define SOURCE_CODE_URL "github.com/Andy-Big/Marlin_FB_Reborn"
 #endif
 
 /**
@@ -97,7 +101,7 @@
    * documentation about a specific Marlin release. Displayed in the Info Menu.
    */
 #ifndef WEBSITE_URL
-  #define WEBSITE_URL "tycoon-2.0.2"
+  #define WEBSITE_URL "github.com/Andy-Big/Marlin_FB_Reborn"
 #endif
 
 /**
@@ -105,18 +109,18 @@
  * Currently only supported by DUE platform
  */
 #ifndef USB_DEVICE_VENDOR_ID
-  #define  USB_DEVICE_VENDOR_ID           0x03EB /* ATMEL VID */
+  #define USB_DEVICE_VENDOR_ID            0x03EB /* ATMEL VID */
 #endif
 #ifndef USB_DEVICE_PRODUCT_ID
-  #define  USB_DEVICE_PRODUCT_ID          0x2424 /* MSC / CDC */
+  #define USB_DEVICE_PRODUCT_ID           0x2424 /* MSC / CDC */
 #endif
 //! USB Device string definitions (Optional)
 #ifndef USB_DEVICE_MANUFACTURE_NAME
-  #define  USB_DEVICE_MANUFACTURE_NAME    WEBSITE_URL
+  #define USB_DEVICE_MANUFACTURE_NAME     WEBSITE_URL
 #endif
 #ifdef CUSTOM_MACHINE_NAME
-  #define  USB_DEVICE_PRODUCT_NAME        CUSTOM_MACHINE_NAME
+  #define USB_DEVICE_PRODUCT_NAME         CUSTOM_MACHINE_NAME
 #else
-  #define  USB_DEVICE_PRODUCT_NAME        MACHINE_NAME
+  #define USB_DEVICE_PRODUCT_NAME         MACHINE_NAME
 #endif
-#define  USB_DEVICE_SERIAL_NAME           "123985739853"
+#define USB_DEVICE_SERIAL_NAME            "123985739853"

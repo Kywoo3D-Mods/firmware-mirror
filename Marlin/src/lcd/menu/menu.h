@@ -39,15 +39,18 @@ typedef void (*selectFunc_t)();
 #define SS_INVERT  0x02
 #define SS_DEFAULT SS_CENTER
 
-#if HAS_MARLINUI_U8GLIB && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
-  void _lcd_zoffset_overlay_gfx(const_float_t zvalue);
-#endif
-
 #if ENABLED(BABYSTEP_ZPROBE_OFFSET) && Z_PROBE_OFFSET_RANGE_MIN >= -9 && Z_PROBE_OFFSET_RANGE_MAX <= 9
   #define BABYSTEP_TO_STR(N) ftostr43sign(N)
 #elif ENABLED(BABYSTEPPING)
   #define BABYSTEP_TO_STR(N) ftostr53sign(N)
 #endif
+
+typedef struct
+{
+  uint8_t   count;
+  void      *values[4];
+} EditScreenPreValues;
+
 
 ////////////////////////////////////////////
 ///////////// Base Menu Items //////////////
@@ -89,6 +92,23 @@ class MenuItem_back : public MenuItemBase {
     FORCE_INLINE static void action(PGM_P const=nullptr) { ui.go_back(); }
 };
 
+#if ENABLED(RS_STYLE_COLOR_UI)
+  // CONFIRM_ITEM(LABEL,Y,N,FY,FN,...),
+  // YESNO_ITEM(LABEL,FY,FN,...)
+  class MenuItem_fileconfirm : public MenuItemBase {
+    public:
+      FORCE_INLINE static void draw(const bool sel, const uint8_t row, PGM_P const pstr, ...) {
+        _draw(sel, row, pstr, '>', LCD_STR_ARROW_RIGHT[0]);
+      }
+      // Implemented for HD44780 and DOGM
+      // Draw the prompt, buttons, and state
+      static void draw_select_screen(
+        const char * const string  // Prompt runtime string
+      );
+      static void select_screen(selectFunc_t yesFunc, selectFunc_t noFunc, const char * const string=nullptr);
+  };
+#endif
+
 // CONFIRM_ITEM(LABEL,Y,N,FY,FN,...),
 // YESNO_ITEM(LABEL,FY,FN,...)
 class MenuItem_confirm : public MenuItemBase {
@@ -114,7 +134,7 @@ class MenuItem_confirm : public MenuItemBase {
     static inline void select_screen(
       PGM_P const yes, PGM_P const no,
       selectFunc_t yesFunc, selectFunc_t noFunc,
-      PGM_P const pref, const progmem_str string, PGM_P const suff=nullptr
+      PGM_P const pref, FSTR_P const string, PGM_P const suff=nullptr
     ) {
       char str[strlen_P((PGM_P)string) + 1];
       strcpy_P(str, (PGM_P)string);
@@ -126,20 +146,22 @@ class MenuItem_confirm : public MenuItemBase {
     }
 };
 
+
 ////////////////////////////////////////////
 ///////////// Edit Menu Items //////////////
 ////////////////////////////////////////////
 
 // The Menu Edit shadow value
 typedef union {
-  bool     state;
-  float    decimal;
-  int8_t   int8;
-  int16_t  int16;
-  int32_t  int32;
-  uint8_t  uint8;
-  uint16_t uint16;
-  uint32_t uint32;
+  bool      state;
+  float     decimal;
+  int8_t    int8;
+  int16_t   int16;
+  int32_t   int32;
+  uint8_t   uint8;
+  uint16_t  uint16;
+  uint32_t  uint32;
+  celsius_t celsius;
 } chimera_t;
 extern chimera_t editable;
 
@@ -152,6 +174,7 @@ class MenuEditItemBase : public MenuItemBase {
     // into behavior and unused items get optimized out.
     static PGM_P editLabel;
     static void *editValue;
+    static EditScreenPreValues predefValues;
     static int32_t minEditValue, maxEditValue;  // Encoder value range
     static screenFunc_t callbackFunc;
     static bool liveEdit;
@@ -197,6 +220,7 @@ class MenuEditItemBase : public MenuItemBase {
 
 void menu_main();
 void menu_move();
+void menu_tune();
 
 #if ENABLED(SDSUPPORT)
   void menu_media();

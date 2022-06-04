@@ -30,6 +30,11 @@
 
 #include "menu_item.h"
 
+#include "../tft/tft_string.h"
+
+#include "..\..\module\mks_wifi\mks_wifi.h"
+
+
 #if HAS_GAMES
   #include "game/game.h"
 #endif
@@ -106,6 +111,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E0 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_0_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_0_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_1 != 0
@@ -115,6 +121,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E1 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_1_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_1_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_2 != 0
@@ -124,6 +131,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E2 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_2_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_2_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_3 != 0
@@ -133,6 +141,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E3 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_3_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_3_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_4 != 0
@@ -142,6 +151,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E4 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_4_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_4_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_5 != 0
@@ -151,6 +161,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E5 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_5_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_5_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_6 != 0
@@ -160,6 +171,7 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E6 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_6_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_6_MAXTEMP), SS_LEFT);
+    STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
   #if TEMP_SENSOR_7 != 0
@@ -169,9 +181,6 @@ void menu_info_thermistors() {
     STATIC_ITEM_P(PSTR(LCD_STR_E7 ": " THERMISTOR_NAME), SS_INVERT);
     PSTRING_ITEM(MSG_INFO_MIN_TEMP, STRINGIFY(HEATER_7_MINTEMP), SS_LEFT);
     PSTRING_ITEM(MSG_INFO_MAX_TEMP, STRINGIFY(HEATER_7_MAXTEMP), SS_LEFT);
-  #endif
-
-  #if HAS_EXTRUDERS
     STATIC_ITEM(TERN(WATCH_HOTENDS, MSG_INFO_RUNAWAY_ON, MSG_INFO_RUNAWAY_OFF), SS_LEFT);
   #endif
 
@@ -250,9 +259,11 @@ void menu_info_board() {
     STATIC_ITEM(MSG_MARLIN, SS_DEFAULT|SS_INVERT);              // Marlin
     STATIC_ITEM_P(PSTR(SHORT_BUILD_VERSION));                   // x.x.x-Branch
     STATIC_ITEM_P(PSTR(STRING_DISTRIBUTION_DATE));              // YYYY-MM-DD HH:MM
-    STATIC_ITEM_P(PSTR(MACHINE_NAME));                          // My3DPrinter
+    STATIC_ITEM_P(PSTR(MACHINE_NAME), SS_DEFAULT|SS_INVERT);    // My3DPrinter
     STATIC_ITEM_P(PSTR(WEBSITE_URL));                           // www.my3dprinter.com
     PSTRING_ITEM(MSG_INFO_EXTRUDERS, STRINGIFY(EXTRUDERS), SS_CENTER); // Extruders: 2
+    #ifdef MKS_WIFI                                             // WiFi info
+    #endif
     #if HAS_LEVELING
       STATIC_ITEM(
         TERN_(AUTO_BED_LEVELING_3POINT, MSG_3POINT_LEVELING)      // 3-Point Leveling
@@ -265,6 +276,33 @@ void menu_info_board() {
     END_SCREEN();
   }
 
+#ifdef MKS_WIFI                                             // WiFi info
+  void menu_info_wifi() {
+      if (ui.use_click()) return ui.go_back();
+      START_SCREEN();
+      if (mks_wifi_info.connected)
+      {
+        PSTRING_ITEM(MSG_WIFI_CONNECTED, GET_TEXT(MSG_YES), SS_CENTER);
+      
+        if (mks_wifi_info.mode == 0x01)
+          PSTRING_ITEM(MSG_WIFI_MODE, "AP", SS_CENTER);
+        else
+          PSTRING_ITEM(MSG_WIFI_MODE, "Client", SS_CENTER);
+        
+        char ip_addr[16];
+         sprintf(ip_addr,"%d.%d.%d.%d", mks_wifi_info.ip[0], mks_wifi_info.ip[1], mks_wifi_info.ip[2], mks_wifi_info.ip[3]);
+        PSTRING_ITEM(MSG_WIFI_ADDRESS, ip_addr, SS_CENTER);
+        PSTRING_ITEM(MSG_WIFI_NETWORK, mks_wifi_info.net_name, SS_CENTER);
+      }
+      else
+      {
+        PSTRING_ITEM(MSG_WIFI_CONNECTED, GET_TEXT(MSG_NO), SS_CENTER);
+      }
+
+      END_SCREEN();
+    }
+#endif
+
 #endif
 
 //
@@ -272,17 +310,20 @@ void menu_info_board() {
 //
 void menu_info() {
   START_MENU();
-  BACK_ITEM(MSG_MAIN);
+  // BACK_ITEM(MSG_MAIN);
   #if ENABLED(LCD_PRINTER_INFO_IS_BOOTSCREEN)
     SUBMENU(MSG_INFO_PRINTER_MENU, TERN(SHOW_CUSTOM_BOOTSCREEN, menu_show_custom_bootscreen, menu_show_marlin_bootscreen));
   #else
     SUBMENU(MSG_INFO_PRINTER_MENU, menu_info_printer);           // Printer Info >
     SUBMENU(MSG_INFO_BOARD_MENU, menu_info_board);               // Board Info >
     #if HAS_EXTRUDERS
-      SUBMENU(MSG_INFO_THERMISTOR_MENU, menu_info_thermistors);  // Thermistors >
+      // SUBMENU(MSG_INFO_THERMISTOR_MENU, menu_info_thermistors);  // Thermistors >
     #endif
   #endif
 
+  #ifdef MKS_WIFI                                             // WiFi info
+    SUBMENU(MSG_INFO_WIFI_MENU, menu_info_wifi);           // Printer Info >
+  #endif
   #if ENABLED(PRINTCOUNTER)
     SUBMENU(MSG_INFO_STATS_MENU, menu_info_stats);               // Printer Stats >
   #endif

@@ -91,7 +91,7 @@ void menu_advanced_settings();
   void menu_debug() {
     START_MENU();
 
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
 
     #if ENABLED(LCD_PROGRESS_BAR_TEST)
       SUBMENU(MSG_PROGRESS_BAR_TEST, _progress_bar_test);
@@ -108,7 +108,7 @@ void menu_advanced_settings();
 
   void menu_tool_change() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
     #if ENABLED(TOOLCHANGE_FILAMENT_SWAP)
       static constexpr float max_extrude = TERN(PREVENT_LENGTHY_EXTRUDE, EXTRUDE_MAXLENGTH, 500);
       #if ENABLED(TOOLCHANGE_PARK)
@@ -136,7 +136,7 @@ void menu_advanced_settings();
       PGM_P const msg_migrate = GET_TEXT(MSG_TOOL_MIGRATION_SWAP);
 
       START_MENU();
-      BACK_ITEM(MSG_CONFIGURATION);
+      // BACK_ITEM(MSG_CONFIGURATION);
 
       // Auto mode ON/OFF
       EDIT_ITEM(bool, MSG_TOOL_MIGRATION_AUTO, &migration.automode);
@@ -172,7 +172,7 @@ void menu_advanced_settings();
     };
 
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
     #if ENABLED(DUAL_X_CARRIAGE)
       EDIT_ITEM_FAST(float42_52, MSG_HOTEND_OFFSET_X, &hotend_offset[1].x, float(X2_HOME_POS - 25), float(X2_HOME_POS + 25), _recalc_offsets);
     #else
@@ -193,7 +193,7 @@ void menu_advanced_settings();
     const bool need_g28 = axes_should_home(_BV(Y_AXIS)|_BV(Z_AXIS));
 
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
 
     GCODES_ITEM(MSG_IDEX_MODE_AUTOPARK,  PSTR("M605S1\nG28X\nG1X0"));
     GCODES_ITEM(MSG_IDEX_MODE_DUPLICATE, need_g28
@@ -217,7 +217,7 @@ void menu_advanced_settings();
 
   #if ENABLED(BLTOUCH_LCD_VOLTAGE_MENU)
     void bltouch_report() {
-      SERIAL_ECHOLNPAIR("EEPROM Last BLTouch Mode - ", bltouch.last_written_mode);
+      SERIAL_ECHOLNPGM("EEPROM Last BLTouch Mode - ", bltouch.last_written_mode);
       SERIAL_ECHOLNPGM("Configuration BLTouch Mode - " TERN(BLTOUCH_SET_5V_MODE, "5V", "OD"));
       char mess[21];
       strcpy_P(mess, PSTR("BLTouch Mode - "));
@@ -229,6 +229,7 @@ void menu_advanced_settings();
 
   void menu_bltouch() {
     START_MENU();
+    // BACK_ITEM(MSG_CONFIGURATION);
     ACTION_ITEM(MSG_BLTOUCH_RESET, bltouch._reset);
     ACTION_ITEM(MSG_BLTOUCH_SELFTEST, bltouch._selftest);
     ACTION_ITEM(MSG_BLTOUCH_DEPLOY, bltouch._deploy);
@@ -252,7 +253,7 @@ void menu_advanced_settings();
   void menu_touchmi() {
     ui.defer_status_screen();
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
     GCODES_ITEM(MSG_TOUCHMI_INIT, PSTR("M851 Z0\nG28\nG1 F200 Z0"));
     SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
     GCODES_ITEM(MSG_TOUCHMI_SAVE, PSTR("M500\nG1 F200 Z10"));
@@ -268,7 +269,7 @@ void menu_advanced_settings();
 
   void menu_controller_fan() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
     EDIT_ITEM_FAST(percent, MSG_CONTROLLER_FAN_IDLE_SPEED, &controllerFan.settings.idle_speed, _MAX(1, CONTROLLERFAN_SPEED_MIN) - 1, 255);
     EDIT_ITEM(bool, MSG_CONTROLLER_FAN_AUTO_ON, &controllerFan.settings.auto_mode);
     if (controllerFan.settings.auto_mode) {
@@ -286,21 +287,21 @@ void menu_advanced_settings();
 
   void menu_config_retract() {
     START_MENU();
-    BACK_ITEM(MSG_CONFIGURATION);
+    // BACK_ITEM(MSG_CONFIGURATION);
     #if ENABLED(FWRETRACT_AUTORETRACT)
       EDIT_ITEM(bool, MSG_AUTORETRACT, &fwretract.autoretract_enabled, fwretract.refresh_autoretract);
     #endif
-    EDIT_ITEM(float52sign, MSG_CONTROL_RETRACT, &fwretract.settings.retract_length, 0, 100);
+    EDIT_ITEM(float31sign, MSG_CONTROL_RETRACT, &fwretract.settings.retract_length, 0, 10);
     #if HAS_MULTI_EXTRUDER
       EDIT_ITEM(float52sign, MSG_CONTROL_RETRACT_SWAP, &fwretract.settings.swap_retract_length, 0, 100);
     #endif
-    EDIT_ITEM(float3, MSG_CONTROL_RETRACTF, &fwretract.settings.retract_feedrate_mm_s, 1, 999);
-    EDIT_ITEM(float52sign, MSG_CONTROL_RETRACT_ZHOP, &fwretract.settings.retract_zraise, 0, 999);
-    EDIT_ITEM(float52sign, MSG_CONTROL_RETRACT_RECOVER, &fwretract.settings.retract_recover_extra, -100, 100);
+    EDIT_ITEM(float3, MSG_CONTROL_RETRACTF, &fwretract.settings.retract_feedrate_mm_s, 1, 100);
+    EDIT_ITEM(float31sign, MSG_CONTROL_RETRACT_ZHOP, &fwretract.settings.retract_zraise, 0, 5);
+    EDIT_ITEM(float31sign, MSG_CONTROL_RETRACT_RECOVER, &fwretract.settings.retract_recover_extra, -5, 5);
     #if HAS_MULTI_EXTRUDER
       EDIT_ITEM(float52sign, MSG_CONTROL_RETRACT_RECOVER_SWAP, &fwretract.settings.swap_retract_recover_extra, -100, 100);
     #endif
-    EDIT_ITEM(float3, MSG_CONTROL_RETRACT_RECOVERF, &fwretract.settings.retract_recover_feedrate_mm_s, 1, 999);
+    EDIT_ITEM(float3, MSG_CONTROL_RETRACT_RECOVERF, &fwretract.settings.retract_recover_feedrate_mm_s, 1, 100);
     #if HAS_MULTI_EXTRUDER
       EDIT_ITEM(float3, MSG_CONTROL_RETRACT_RECOVER_SWAPF, &fwretract.settings.swap_retract_recover_feedrate_mm_s, 1, 999);
     #endif
@@ -319,6 +320,7 @@ void menu_advanced_settings();
     const uint8_t m = MenuItemBase::itemIndex;
     START_MENU();
     STATIC_ITEM_P(ui.get_preheat_label(m), SS_DEFAULT|SS_INVERT);
+    // BACK_ITEM(MSG_CONFIGURATION);
     #if HAS_FAN
       editable.uint8 = uint8_t(ui.material_preset[m].fan_speed);
       EDIT_ITEM_N(percent, m, MSG_FAN_SPEED, &editable.uint8, 0, 255, []{ ui.material_preset[MenuItemBase::itemIndex].fan_speed = editable.uint8; });
@@ -347,14 +349,9 @@ void menu_advanced_settings();
 
   void custom_menus_configuration() {
     START_MENU();
-    BACK_ITEM(MSG_MAIN);
+    // BACK_ITEM(MSG_MAIN);
 
     #define HAS_CUSTOM_ITEM_CONF(N) (defined(CONFIG_MENU_ITEM_##N##_DESC) && defined(CONFIG_MENU_ITEM_##N##_GCODE))
-
-    #define CUSTOM_TEST_CONF(N) do{ \
-      constexpr char c = CONFIG_MENU_ITEM_##N##_GCODE[strlen(CONFIG_MENU_ITEM_##N##_GCODE) - 1]; \
-      static_assert(c != '\n' && c != '\r', "CONFIG_MENU_ITEM_" STRINGIFY(N) "_GCODE cannot have a newline at the end. Please remove it."); \
-    }while(0)
 
     #ifdef CUSTOM_MENU_CONFIG_SCRIPT_DONE
       #define _DONE_SCRIPT "\n" CUSTOM_MENU_CONFIG_SCRIPT_DONE
@@ -363,115 +360,97 @@ void menu_advanced_settings();
     #endif
     #define GCODE_LAMBDA_CONF(N) []{ _lcd_custom_menus_configuration_gcode(PSTR(CONFIG_MENU_ITEM_##N##_GCODE _DONE_SCRIPT)); }
     #define _CUSTOM_ITEM_CONF(N) ACTION_ITEM_P(PSTR(CONFIG_MENU_ITEM_##N##_DESC), GCODE_LAMBDA_CONF(N));
-    #define _CUSTOM_ITEM_CONF_CONFIRM(N)             \
+    #define _CUSTOM_ITEM_CONF_CONFIRM(N)               \
       SUBMENU_P(PSTR(CONFIG_MENU_ITEM_##N##_DESC), []{ \
-          MenuItem_confirm::confirm_screen(          \
-            GCODE_LAMBDA_CONF(N),                    \
-            ui.goto_previous_screen,                 \
+          MenuItem_confirm::confirm_screen(            \
+            GCODE_LAMBDA_CONF(N),                      \
+            ui.goto_previous_screen,                   \
             PSTR(CONFIG_MENU_ITEM_##N##_DESC "?")      \
-          );                                         \
+          );                                           \
         })
 
-    #define CUSTOM_ITEM_CONF(N) do{ if (ENABLED(CONFIG_MENU_ITEM_##N##_CONFIRM)) _CUSTOM_ITEM_CONF_CONFIRM(N); else _CUSTOM_ITEM_CONF(N); }while(0)
+    #define CUSTOM_ITEM_CONF(N) do{ \
+      constexpr char c = CONFIG_MENU_ITEM_##N##_GCODE[strlen(CONFIG_MENU_ITEM_##N##_GCODE) - 1]; \
+      static_assert(c != '\n' && c != '\r', "CONFIG_MENU_ITEM_" STRINGIFY(N) "_GCODE cannot have a newline at the end. Please remove it."); \
+      if (ENABLED(CONFIG_MENU_ITEM_##N##_CONFIRM)) \
+        _CUSTOM_ITEM_CONF_CONFIRM(N); \
+      else \
+        _CUSTOM_ITEM_CONF(N); \
+    }while(0)
 
     #if HAS_CUSTOM_ITEM_CONF(1)
-      CUSTOM_TEST_CONF(1);
       CUSTOM_ITEM_CONF(1);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(2)
-      CUSTOM_TEST_CONF(2);
       CUSTOM_ITEM_CONF(2);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(3)
-      CUSTOM_TEST_CONF(3);
       CUSTOM_ITEM_CONF(3);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(4)
-      CUSTOM_TEST_CONF(4);
       CUSTOM_ITEM_CONF(4);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(5)
-      CUSTOM_TEST_CONF(5);
       CUSTOM_ITEM_CONF(5);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(6)
-      CUSTOM_TEST_CONF(6);
       CUSTOM_ITEM_CONF(6);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(7)
-      CUSTOM_TEST_CONF(7);
       CUSTOM_ITEM_CONF(7);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(8)
-      CUSTOM_TEST_CONF(8);
       CUSTOM_ITEM_CONF(8);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(9)
-      CUSTOM_TEST_CONF(9);
       CUSTOM_ITEM_CONF(9);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(10)
-      CUSTOM_TEST_CONF(10);
       CUSTOM_ITEM_CONF(10);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(11)
-      CUSTOM_TEST_CONF(11);
       CUSTOM_ITEM_CONF(11);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(12)
-      CUSTOM_TEST_CONF(12);
       CUSTOM_ITEM_CONF(12);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(13)
-      CUSTOM_TEST_CONF(13);
       CUSTOM_ITEM_CONF(13);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(14)
-      CUSTOM_TEST_CONF(14);
       CUSTOM_ITEM_CONF(14);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(15)
-      CUSTOM_TEST_CONF(15);
       CUSTOM_ITEM_CONF(15);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(16)
-      CUSTOM_TEST_CONF(16);
       CUSTOM_ITEM_CONF(16);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(17)
-      CUSTOM_TEST_CONF(17);
       CUSTOM_ITEM_CONF(17);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(18)
-      CUSTOM_TEST_CONF(18);
       CUSTOM_ITEM_CONF(18);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(19)
-      CUSTOM_TEST_CONF(19);
       CUSTOM_ITEM_CONF(19);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(20)
-      CUSTOM_TEST_CONF(20);
       CUSTOM_ITEM_CONF(20);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(21)
-      CUSTOM_TEST_CONF(21);
       CUSTOM_ITEM_CONF(21);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(22)
-      CUSTOM_TEST_CONF(22);
       CUSTOM_ITEM_CONF(22);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(23)
-      CUSTOM_TEST_CONF(23);
       CUSTOM_ITEM_CONF(23);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(24)
-      CUSTOM_TEST_CONF(24);
       CUSTOM_ITEM_CONF(24);
     #endif
     #if HAS_CUSTOM_ITEM_CONF(25)
-      CUSTOM_TEST_CONF(25);
       CUSTOM_ITEM_CONF(25);
     #endif
     END_MENU();
@@ -483,8 +462,8 @@ void menu_configuration() {
   const bool busy = printer_busy();
 
   START_MENU();
+  // BACK_ITEM(MSG_MAIN);
 
-  ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
   //
   // Debug Menu when certain options are enabled
   //
@@ -505,7 +484,7 @@ void menu_configuration() {
   SUBMENU(MSG_ADVANCED_SETTINGS, menu_advanced_settings);
 
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
-    //SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
+    SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
   #elif HAS_BED_PROBE
     EDIT_ITEM(LCD_Z_OFFSET_TYPE, MSG_ZPROBE_ZOFFSET, &probe.offset.z, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX);
   #endif
@@ -531,7 +510,7 @@ void menu_configuration() {
     #endif
 
     #if ENABLED(BLTOUCH)
-      //SUBMENU(MSG_BLTOUCH, menu_bltouch);
+      SUBMENU(MSG_BLTOUCH, menu_bltouch);
     #endif
 
     #if ENABLED(TOUCH_MI_PROBE)
@@ -549,8 +528,11 @@ void menu_configuration() {
     #endif
   #endif
 
+  #if HAS_LCD_BRIGHTNESS
+    EDIT_ITEM_FAST(uint8, MSG_BRIGHTNESS, &ui.brightness, LCD_BRIGHTNESS_MIN, LCD_BRIGHTNESS_MAX, ui.refresh_brightness, true);
+  #endif
   #if HAS_LCD_CONTRAST
-    EDIT_ITEM(int3, MSG_CONTRAST, &ui.contrast, LCD_CONTRAST_MIN, LCD_CONTRAST_MAX, ui.refresh_contrast, true);
+    EDIT_ITEM_FAST(uint8, MSG_CONTRAST, &ui.contrast, LCD_CONTRAST_MIN, LCD_CONTRAST_MAX, ui.refresh_contrast, true);
   #endif
   #if ENABLED(FWRETRACT)
     SUBMENU(MSG_RETRACT, menu_config_retract);
@@ -574,6 +556,12 @@ void menu_configuration() {
     EDIT_ITEM(bool, MSG_SOUND, &ui.buzzer_enabled, []{ ui.chirp(); });
   #endif
 
+  #if ENABLED(EEPROM_SETTINGS)
+    ACTION_ITEM(MSG_STORE_EEPROM, ui.store_settings);
+    if (!busy) ACTION_ITEM(MSG_LOAD_EEPROM, ui.load_settings);
+  #endif
+
+  if (!busy) ACTION_ITEM(MSG_RESTORE_DEFAULTS, ui.reset_settings);
 
   END_MENU();
 }

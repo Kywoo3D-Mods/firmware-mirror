@@ -30,6 +30,10 @@
 
 #include "menu_item.h"
 
+#if ENABLED(PSU_CONTROL)
+  #include "../../feature/power.h"
+#endif
+
 #if ENABLED(LED_CONTROL_MENU)
   #include "../../feature/leds/leds.h"
 
@@ -40,7 +44,7 @@
       #if LCD_HEIGHT > 2
         STATIC_ITEM(MSG_LED_PRESETS, SS_DEFAULT|SS_INVERT);
       #endif
-      BACK_ITEM(MSG_LED_CONTROL);
+      // BACK_ITEM(MSG_LED_CONTROL);
       ACTION_ITEM(MSG_SET_LEDS_WHITE,  leds.set_white);
       ACTION_ITEM(MSG_SET_LEDS_RED,    leds.set_red);
       ACTION_ITEM(MSG_SET_LEDS_ORANGE, leds.set_orange);
@@ -61,7 +65,7 @@
       #if LCD_HEIGHT > 2
         STATIC_ITEM(MSG_NEO2_PRESETS, SS_DEFAULT|SS_INVERT);
       #endif
-      BACK_ITEM(MSG_LED_CONTROL);
+      // BACK_ITEM(MSG_LED_CONTROL);
       ACTION_ITEM(MSG_SET_LEDS_WHITE,  leds2.set_white);
       ACTION_ITEM(MSG_SET_LEDS_RED,    leds2.set_red);
       ACTION_ITEM(MSG_SET_LEDS_ORANGE, leds2.set_orange);
@@ -77,7 +81,7 @@
 
   void menu_led_custom() {
     START_MENU();
-    BACK_ITEM(MSG_LED_CONTROL);
+    // BACK_ITEM(MSG_LED_CONTROL);
     #if ENABLED(NEOPIXEL2_SEPARATE)
       STATIC_ITEM_N(MSG_LED_CHANNEL_N, 1, SS_DEFAULT|SS_INVERT);
     #endif
@@ -112,7 +116,7 @@
   #if CASELIGHT_USES_BRIGHTNESS
     void menu_case_light() {
       START_MENU();
-      BACK_ITEM(MSG_CONFIGURATION);
+      // BACK_ITEM(MSG_CONFIGURATION);
       EDIT_ITEM(percent, MSG_CASE_LIGHT_BRIGHTNESS, &caselight.brightness, 0, 255, caselight.update_brightness, true);
       CASELIGHT_TOGGLE_ITEM();
       END_MENU();
@@ -122,15 +126,10 @@
 
 void menu_led() {
   START_MENU();
-  BACK_ITEM(MSG_MAIN);
+  // BACK_ITEM(MSG_MAIN);
 
   #if ENABLED(LED_CONTROL_MENU)
-    #if ENABLED(PSU_CONTROL)
-      extern bool powersupply_on;
-    #else
-      constexpr bool powersupply_on = true;
-    #endif
-    if (powersupply_on) {
+    if (TERN1(PSU_CONTROL, powerManager.psu_on)) {
       editable.state = leds.lights_on;
       EDIT_ITEM(bool, MSG_LEDS, &editable.state, leds.toggle);
     }

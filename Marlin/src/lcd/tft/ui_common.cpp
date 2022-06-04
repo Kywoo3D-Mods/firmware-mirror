@@ -37,6 +37,27 @@ static xy_uint_t cursor;
   bool draw_menu_navigation = false;
 #endif
 
+#if HAS_TOUCH_SLEEP
+
+  bool lcd_sleep_task() {
+    static bool sleepCleared;
+    if (touch.isSleeping()) {
+      tft.queue.reset();
+      if (!sleepCleared) {
+        sleepCleared = true;
+        ui.clear_lcd();
+        tft.queue.async();
+      }
+      touch.idle();
+      return true;
+    }
+    else
+      sleepCleared = false;
+    return false;
+  }
+
+#endif
+
 void menu_line(const uint8_t row, uint16_t color) {
   cursor.set(0, row);
   tft.canvas(0, TFT_TOP_LINE_Y + cursor.y * MENU_LINE_HEIGHT, TFT_WIDTH, MENU_ITEM_HEIGHT);
@@ -54,7 +75,7 @@ void menu_item(const uint8_t row, bool sel ) {
   menu_line(row, sel ? COLOR_SELECTION_BG : COLOR_BACKGROUND);
   #if ENABLED(TOUCH_SCREEN)
     const TouchControlType tct = TERN(SINGLE_TOUCH_NAVIGATION, true, sel) ? MENU_CLICK : MENU_ITEM;
-    touch.add_control(tct, 0, TFT_TOP_LINE_Y + row * MENU_LINE_HEIGHT, TFT_WIDTH - 80 , MENU_ITEM_HEIGHT, encoderTopLine + row);
+    touch.add_control(tct, 0, TFT_TOP_LINE_Y + row * MENU_LINE_HEIGHT, TFT_WIDTH, MENU_ITEM_HEIGHT, encoderTopLine + row);
   #endif
 }
 
@@ -138,7 +159,7 @@ void MenuEditItemBase::draw(const bool sel, const uint8_t row, PGM_P const pstr,
   tft.add_text(MENU_TEXT_X_OFFSET, MENU_TEXT_Y_OFFSET, COLOR_MENU_TEXT, tft_string);
   if (data) {
     tft_string.set(data);
-    tft.add_text(TFT_WIDTH - MENU_TEXT_X_OFFSET - tft_string.width() - 80 , MENU_TEXT_Y_OFFSET, COLOR_MENU_VALUE, tft_string);
+    tft.add_text(TFT_WIDTH - MENU_TEXT_X_OFFSET - tft_string.width(), MENU_TEXT_Y_OFFSET, COLOR_MENU_VALUE, tft_string);
   }
 }
 
@@ -188,6 +209,15 @@ void MarlinUI::clear_lcd() {
   tft.fill(0, 0, TFT_WIDTH, TFT_HEIGHT, COLOR_BACKGROUND);
   cursor.set(0, 0);
 }
+
+#if HAS_LCD_BRIGHTNESS
+  void MarlinUI::_set_brightness() {
+    #if PIN_EXISTS(TFT_BACKLIGHT)
+      if (PWM_PIN(TFT_BACKLIGHT_PIN))
+        analogWrite(pin_t(TFT_BACKLIGHT_PIN), brightness);
+    #endif
+  }
+#endif
 
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
 

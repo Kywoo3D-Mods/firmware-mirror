@@ -65,8 +65,8 @@
       babystep.add_steps(axis, steps);
     }
     if (ui.should_draw()) {
-      const float spm = planner.steps_to_mm[axis];
-      MenuEditItemBase::draw_edit_screen(msg, BABYSTEP_TO_STR(spm * babystep.accum));
+      const float mps = planner.mm_per_step[axis];
+      MenuEditItemBase::draw_edit_screen(msg, BABYSTEP_TO_STR(mps * babystep.accum));
       #if ENABLED(BABYSTEP_DISPLAY_TOTAL)
         const bool in_view = TERN1(HAS_MARLINUI_U8GLIB, PAGE_CONTAINS(LCD_PIXEL_HEIGHT - MENU_FONT_HEIGHT, LCD_PIXEL_HEIGHT - 1));
         if (in_view) {
@@ -81,7 +81,7 @@
             lcd_put_u8str_P(GET_TEXT(MSG_BABYSTEP_TOTAL));
             lcd_put_wchar(':');
           #endif
-          lcd_put_u8str(BABYSTEP_TO_STR(spm * babystep.axis_total[BS_TOTAL_IND(axis)]));
+          lcd_put_u8str(BABYSTEP_TO_STR(mps * babystep.axis_total[BS_TOTAL_IND(axis)]));
         }
       #endif
     }
@@ -107,12 +107,53 @@
 
 void menu_tune() {
   START_MENU();
-  
+  // BACK_ITEM(MSG_MAIN);
 
   //
   // Speed:
   //
-  EDIT_ITEM(int3, MSG_SPEED, &feedrate_percentage, 10, 999);
+  EDIT_ITEM(int3, MSG_SPEED, &feedrate_percentage, 10, 500);
+
+  //
+  // Flow:
+  //
+  #if HAS_EXTRUDERS
+    EDIT_ITEM(int3, MSG_FLOW, &planner.flow_percentage[active_extruder], 50, 200, []{ planner.refresh_e_factor(active_extruder); });
+    // Flow En:
+    #if HAS_MULTI_EXTRUDER
+      LOOP_L_N(n, EXTRUDERS)
+        EDIT_ITEM_N(int3, n, MSG_FLOW_N, &planner.flow_percentage[n], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
+    #endif
+  #endif
+
+  //
+  // Babystep X:
+  // Babystep Y:
+  // Babystep Z:
+  //
+  #if ENABLED(BABYSTEPPING)
+    #if ENABLED(BABYSTEP_XY)
+      SUBMENU(MSG_BABYSTEP_X, []{ _lcd_babystep_go(_lcd_babystep_x); });
+      SUBMENU(MSG_BABYSTEP_Y, []{ _lcd_babystep_go(_lcd_babystep_y); });
+    #endif
+    #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
+      SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
+    #else
+      SUBMENU(MSG_BABYSTEP_Z, lcd_babystep_z);
+    #endif
+  #endif
+
+  //
+  // Advance K:
+  //
+  #if ENABLED(LIN_ADVANCE) && DISABLED(SLIM_LCD_MENUS)
+    #if EXTRUDERS == 1
+      EDIT_ITEM(float43, MSG_ADVANCE_K, &planner.extruder_advance_K[0], 0, 0.5);
+    #elif HAS_MULTI_EXTRUDER
+      LOOP_L_N(n, EXTRUDERS)
+        EDIT_ITEM_N(float43, n, MSG_ADVANCE_K_E, &planner.extruder_advance_K[n], 0, 2);
+    #endif
+  #endif
 
   //
   // Manual bed leveling, Bed Z:
@@ -121,6 +162,7 @@ void menu_tune() {
     EDIT_ITEM(float43, MSG_BED_Z, &mbl.z_offset, -1, 1);
   #endif
 
+ /*
   //
   // Nozzle:
   // Nozzle [1-4]:
@@ -191,48 +233,7 @@ void menu_tune() {
     #endif
 
   #endif // HAS_FAN
-
-  //
-  // Flow:
-  //
-  #if HAS_EXTRUDERS
-    EDIT_ITEM(int3, MSG_FLOW, &planner.flow_percentage[active_extruder], 10, 999, []{ planner.refresh_e_factor(active_extruder); });
-    // Flow En:
-    #if HAS_MULTI_EXTRUDER
-      LOOP_L_N(n, EXTRUDERS)
-        EDIT_ITEM_N(int3, n, MSG_FLOW_N, &planner.flow_percentage[n], 10, 999, []{ planner.refresh_e_factor(MenuItemBase::itemIndex); });
-    #endif
-  #endif
-
-  //
-  // Advance K:
-  //
-  #if ENABLED(LIN_ADVANCE) && DISABLED(SLIM_LCD_MENUS)
-    #if EXTRUDERS == 1
-      EDIT_ITEM(float42_52, MSG_ADVANCE_K, &planner.extruder_advance_K[0], 0, 10);
-    #elif HAS_MULTI_EXTRUDER
-      LOOP_L_N(n, EXTRUDERS)
-        EDIT_ITEM_N(float42_52, n, MSG_ADVANCE_K_E, &planner.extruder_advance_K[n], 0, 10);
-    #endif
-  #endif
-
-  //
-  // Babystep X:
-  // Babystep Y:
-  // Babystep Z:
-  //
-  #if ENABLED(BABYSTEPPING)
-    #if ENABLED(BABYSTEP_XY)
-      SUBMENU(MSG_BABYSTEP_X, []{ _lcd_babystep_go(_lcd_babystep_x); });
-      SUBMENU(MSG_BABYSTEP_Y, []{ _lcd_babystep_go(_lcd_babystep_y); });
-    #endif
-    #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
-      SUBMENU(MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
-    #else
-      SUBMENU(MSG_BABYSTEP_Z, lcd_babystep_z);
-    #endif
-  #endif
-
+*/
   END_MENU();
 }
 

@@ -529,7 +529,9 @@ void menu_configuration() {
     EDIT_ITEM(bool, MSG_OUTAGE_RECOVERY, &recovery.enabled, recovery.changed);
   #endif
 
-  EDIT_ITEM(bool, MSG_TEMP_NOZZLE_MAX, &temp_nozzle_max_key, ui.store_settings);
+  #ifdef PSU_CONTROL
+    EDIT_ITEM(bool, MSG_TEMP_NOZZLE_MAX, &temp_nozzle_max_key, ui.store_settings);
+  #endif
 
   // Preheat configurations
   #if PREHEAT_COUNT && DISABLED(SLIM_LCD_MENUS)

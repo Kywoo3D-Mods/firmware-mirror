@@ -155,7 +155,7 @@
   #define STEPPERS_MICROSTEP 32
 #endif
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "Tycoon"
+#define CUSTOM_MACHINE_NAME "Tycoon Max"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4
@@ -577,7 +577,7 @@
 #define HEATER_5_MAXTEMP 300
 #define HEATER_6_MAXTEMP 300
 #define HEATER_7_MAXTEMP 300
-#define BED_MAXTEMP      125
+#define BED_MAXTEMP      130
 #define CHAMBER_MAXTEMP  60
 
 /**
@@ -587,7 +587,7 @@
  * a MAXTEMP shutdown! Use these values to forbid temperatures being set too close to MAXTEMP.
  */
 #define HOTEND_OVERSHOOT 30   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
-#define BED_OVERSHOOT    15   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
+#define BED_OVERSHOOT    20   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
 #define COOLER_OVERSHOOT  2   // (°C) Forbid temperatures closer than OVERSHOOT
 
 //===========================================================================
@@ -651,7 +651,7 @@
  * When set to any value below 255, enables a form of PWM to the bed that acts like a divider
  * so don't use it unless you are OK with PWM on your bed. (See the comment on enabling PIDTEMPBED)
  */
-#define MAX_BED_POWER 255 // limits duty cycle to bed; 255=full current
+#define MAX_BED_POWER 235 // limits duty cycle to bed; 255=full current
 
 #if ENABLED(PIDTEMPBED)
   //#define MIN_BED_POWER 0
@@ -1398,15 +1398,15 @@
 // @section machine
 
 // The size of the printable area
-#define X_BED_SIZE 240
-#define Y_BED_SIZE 240
+#define X_BED_SIZE 300
+#define Y_BED_SIZE 300
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 242
-#define Y_MAX_POS 250
+#define X_MAX_POS 302
+#define Y_MAX_POS 304
 #define Z_MAX_POS 228
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
@@ -1416,7 +1416,7 @@
 //#define K_MAX_POS 50
 
 /**
- * Software Endstops  
+ * Software Endstops
  *
  * - Prevent moves outside the set machine bounds.
  * - Individual axes can be disabled, if desired.
@@ -1620,7 +1620,7 @@
   #if ENABLED(G26_MESH_VALIDATION)
     #define MESH_TEST_NOZZLE_SIZE    0.6  // (mm) Diameter of primary nozzle.
     #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for G26.
-    #define MESH_TEST_HOTEND_TEMP  200    // (°C) Default nozzle temperature for G26.
+    #define MESH_TEST_HOTEND_TEMP  215    // (°C) Default nozzle temperature for G26.
     #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for G26.
     #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for G26 XY moves.
     #define G26_XY_FEEDRATE_TRAVEL 100    // (mm/s) Feedrate for G26 XY travel moves.
@@ -1907,7 +1907,7 @@
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
 
 #define PREHEAT_2_LABEL       "ABS"
-#define PREHEAT_2_TEMP_HOTEND 230
+#define PREHEAT_2_TEMP_HOTEND 240
 #define PREHEAT_2_TEMP_BED    100
 #define PREHEAT_2_TEMP_CHAMBER 35
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
@@ -2855,7 +2855,7 @@
 
   #if ENABLED(TFT_COLOR_UI)
     #define SINGLE_TOUCH_NAVIGATION
-    //#define RS_STYLE_COLOR_UI       //New style of Main screen (RebornStyle)
+    //#define RS_STYLE_COLOR_UI       // New style of Main screen (RebornStyle)
   #endif
 #endif
 
